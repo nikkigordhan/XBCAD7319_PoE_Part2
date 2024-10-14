@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_main_menu">
+
+    <fragment
+        android:id="@+id/nav_main_menu"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.main_menu.MainMenuFragment"
+        android:label="Main Menu"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_login_patient"
+            app:destination="@id/nav_login_patient" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_login_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.login_patient.LoginPatientFragment"
+        android:label="Login - Patient"
+        tools:layout="@layout/fragment_login_patient" >
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_home_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.home_patient.HomePatientFragment"
+        android:label="Home - Patient"
+        tools:layout="@layout/fragment_home_patient" >
+        <action
+            android:id="@+id/action_nav_home_patient_to_medicalHistoryFragment"
+            app:destination="@id/nav_medical_history" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_medical_history"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.medical_history.MedicalHistoryFragment"
+        android:label="Medical History"
+        tools:layout="@layout/fragment_medical_history" >
+        <action
+            android:id="@+id/action_nav_medical_history_to_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+
+
+</navigation>
