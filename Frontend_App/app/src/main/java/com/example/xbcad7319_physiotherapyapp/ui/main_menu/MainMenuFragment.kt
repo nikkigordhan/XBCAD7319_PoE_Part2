@@ -30,10 +30,20 @@ class MainMenuFragment : Fragment() {
 
         // Initialize the Button using the binding
         val btnPatientLogin: Button = binding.btnLPatient
+        val btnStaffLogin: Button = binding.btnLStaff
+        val btnPatientRegister: Button = binding.btnRPatient
 
         // Set OnClickListener for Patient Login button
         btnPatientLogin.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_nav_login_patient)
+        }
+        // Set OnClickListener for Staff Login button
+        btnStaffLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_main_menu_to_nav_login_staff)
+        }
+        // Set OnClickListener for Patient Login button
+        btnPatientRegister.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_main_menu_to_nav_register_patient)
         }
 
         return root
