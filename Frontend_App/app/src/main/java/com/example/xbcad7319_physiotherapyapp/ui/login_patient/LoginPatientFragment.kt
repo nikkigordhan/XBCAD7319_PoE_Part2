@@ -29,6 +29,7 @@ class LoginPatientFragment : Fragment() {
     ): View {
         return inflater.inflate(R.layout.fragment_login_patient, container, false)
 
+        // add code logic here.
 
         }
     }

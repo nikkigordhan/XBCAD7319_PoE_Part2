@@ -29,8 +29,20 @@
         android:label="Home - Patient"
         tools:layout="@layout/fragment_home_patient" >
         <action
-            android:id="@+id/action_nav_home_patient_to_medicalHistoryFragment"
+            android:id="@+id/action_nav_home_patient_to_nav_medical_history"
             app:destination="@id/nav_medical_history" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_notifications_patient"
+            app:destination="@id/nav_notifications_patient" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_patient_profile"
+            app:destination="@id/nav_patient_profile" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_medical_tests"
+            app:destination="@id/nav_medical_tests" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_app"
+            app:destination="@id/nav_app" />
     </fragment>
 
     <fragment
@@ -40,6 +52,84 @@
         tools:layout="@layout/fragment_medical_history" >
         <action
             android:id="@+id/action_nav_medical_history_to_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_notifications_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.notifications_patient.NotificationsPatientFragment"
+        android:label="Notifications - Patient"
+        tools:layout="@layout/fragment_notifications_patient" >
+        <action
+            android:id="@+id/action_nav_notifications_patient_to_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_patient_profile"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.profile_patient.ProfilePatientFragment"
+        android:label="fragment_profile_patient"
+        tools:layout="@layout/fragment_profile_patient" >
+        <action
+            android:id="@+id/action_nav_patient_profile_to_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_medical_tests"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.medical_tests.MedicalTestsFragment"
+        android:label="fragment_medical_tests"
+        tools:layout="@layout/fragment_medical_tests" >
+        <action
+            android:id="@+id/action_nav_medical_tests_to_nav_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_app"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.app_patient.AppointmentPatientFragment"
+        android:label="Appointments "
+        tools:layout="@layout/fragment_appointment_client" >
+        <action
+            android:id="@+id/action_nav_app_to_nav_home_patient"
+            app:destination="@id/nav_home_patient" />
+        <action
+            android:id="@+id/action_nav_app_to_nav_book_app_patient"
+            app:destination="@id/nav_book_app_patient" />
+        <action
+            android:id="@+id/action_nav_app_to_nav_reschedule_app_patient"
+            app:destination="@id/nav_reschedule_app_patient" />
+        <action
+            android:id="@+id/action_nav_app_to_nav_cancel_app_patient"
+            app:destination="@id/nav_cancel_app_patient" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/nav_book_app_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.book_app_patient.BookAppPatientFragment"
+        android:label="Book Appointments"
+        tools:layout="@layout/fragment_book_app_patient" >
+        <action
+            android:id="@+id/action_nav_book_app_patient_to_nav_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_reschedule_app_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.reschedule_app_patient.RescheduleAppPatientFragment"
+        android:label="Reschedule Appointment"
+        tools:layout="@layout/fragment_reschedule_app_patient" >
+        <action
+            android:id="@+id/action_nav_reschedule_app_patient_to_nav_home_patient"
+            app:destination="@id/nav_home_patient" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_cancel_app_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.cancel_app_patient.CancelAppPatientFragment"
+        android:label="Cancel Appointment"
+        tools:layout="@layout/fragment_cancel_app_patient" >
+        <action
+            android:id="@+id/action_nav_cancel_app_patient_to_nav_home_patient"
             app:destination="@id/nav_home_patient" />
     </fragment>
 
