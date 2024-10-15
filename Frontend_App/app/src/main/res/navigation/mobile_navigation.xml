@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_nav_home_to_nav_login_patient"
             app:destination="@id/nav_login_patient" />
+        <action
+            android:id="@+id/action_nav_main_menu_to_nav_login_staff"
+            app:destination="@id/nav_login_staff" />
+        <action
+            android:id="@+id/action_nav_main_menu_to_nav_register_patient"
+            app:destination="@id/nav_register_patient" />
     </fragment>
 
     <fragment
@@ -20,6 +26,9 @@
         android:name="com.example.xbcad7319_physiotherapyapp.ui.login_patient.LoginPatientFragment"
         android:label="Login - Patient"
         tools:layout="@layout/fragment_login_patient" >
+        <action
+            android:id="@+id/action_nav_login_patient_to_nav_forget_password_patient"
+            app:destination="@id/nav_forget_password_patient" />
     </fragment>
 
 
@@ -58,7 +67,7 @@
     <fragment
         android:id="@+id/nav_notifications_patient"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.notifications_patient.NotificationsPatientFragment"
-        android:label="Notifications - Patient"
+        android:label="Notifications"
         tools:layout="@layout/fragment_notifications_patient" >
         <action
             android:id="@+id/action_nav_notifications_patient_to_home_patient"
@@ -68,7 +77,7 @@
     <fragment
         android:id="@+id/nav_patient_profile"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.profile_patient.ProfilePatientFragment"
-        android:label="fragment_profile_patient"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile_patient" >
         <action
             android:id="@+id/action_nav_patient_profile_to_home_patient"
@@ -77,7 +86,7 @@
     <fragment
         android:id="@+id/nav_medical_tests"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.medical_tests.MedicalTestsFragment"
-        android:label="fragment_medical_tests"
+        android:label="Medical Tests"
         tools:layout="@layout/fragment_medical_tests" >
         <action
             android:id="@+id/action_nav_medical_tests_to_nav_home_patient"
@@ -161,7 +170,7 @@
     <fragment
         android:id="@+id/nav_notifications_staff"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.notifications_staff.NotificationsStaffFragment"
-        android:label="Notifications -Staff"
+        android:label="Notifications "
         tools:layout="@layout/fragment_notifications_staff" >
         <action
             android:id="@+id/action_nav_notifications_staff_to_nav_home_staff"
@@ -197,12 +206,40 @@
     <fragment
         android:id="@+id/nav_app_staff"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.app_staff.AppSatffFragment"
-        android:label="Appointments - Staff"
+        android:label="Appointments "
         tools:layout="@layout/fragment_app_satff" >
         <action
             android:id="@+id/action_nav_app_staff_to_nav_home_staff"
             app:destination="@id/nav_home_staff" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_login_staff"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.login_staff.LoginStaffFragment"
+        android:label="Login - Staff "
+        tools:layout="@layout/fragment_login_staff" >
+        <action
+            android:id="@+id/action_nav_login_staff_to_nav_forget_password_staff"
+            app:destination="@id/nav_forget_password_staff" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_register_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.register_patient.RegisterPatientFragment"
+        android:label="Register - Patient"
+        tools:layout="@layout/fragment_register_patient" />
+    <fragment
+        android:id="@+id/nav_forget_password_staff"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.forget_password_staff.ForgetPasswordStaffFragment"
+        android:label="Forget Password"
+        tools:layout="@layout/fragment_forget_password_staff" />
+
+    <fragment
+        android:id="@+id/nav_forget_password_patient"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.forget_password_patient.ForgetPasswordPatientFragment"
+        android:label="Forget Password"
+        tools:layout="@layout/fragment_forget_password_patient" />
 
 
 </navigation>

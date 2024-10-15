@@ -1,29 +1,29 @@
-package com.example.xbcad7319_physiotherapyapp.ui.login_patient
+package com.example.xbcad7319_physiotherapyapp.ui.login_staff
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
-import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginPatientBinding
+import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginStaffBinding
 
-
-class LoginPatientFragment : Fragment() {
+class LoginStaffFragment : Fragment() {
 
     companion object {
-        fun newInstance() = LoginPatientFragment()
+        fun newInstance() = LoginStaffFragment()
     }
 
-    private var _binding: FragmentLoginPatientBinding? = null
+    private var _binding: FragmentLoginStaffBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginPatientBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginStaffBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,7 +39,7 @@ class LoginPatientFragment : Fragment() {
     }
 
     private fun onForgotPasswordClicked(view: View) {
-        findNavController().navigate(R.id.action_nav_login_patient_to_nav_forget_password_patient)
+        findNavController().navigate(R.id.action_nav_login_staff_to_nav_forget_password_staff)
     }
 
     override fun onDestroyView() {
