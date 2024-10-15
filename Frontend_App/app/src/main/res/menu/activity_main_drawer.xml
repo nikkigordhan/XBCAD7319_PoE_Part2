@@ -10,7 +10,9 @@
         <item
             android:id="@+id/nav_home_patient"
             android:title="Home - Patient" />
-
+        <item
+            android:id="@+id/nav_home_staff"
+            android:title="Home - Staff" />
     </group>
 
 </menu>
