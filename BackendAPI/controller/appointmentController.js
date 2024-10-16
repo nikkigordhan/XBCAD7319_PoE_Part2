@@ -3,7 +3,7 @@ const Appointment = require('../models/Appointment');
 // Book an appointment
 const bookAppointment = async (req, res) => {
     const { date, time, description } = req.body;
-    const patientId = req.user.id; // Assuming req.user is populated by your auth middleware
+    const patientId = req.user.id; 
   
     try {
       const appointment = new Appointment({
