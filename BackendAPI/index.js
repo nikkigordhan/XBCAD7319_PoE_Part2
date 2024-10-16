@@ -27,11 +27,12 @@ sendReminders(); // Start the reminder service
 
 // HTTPS options (if you're using certificates for HTTPS)
 const options = {
-    key: fs.readFileSync('Keys/server.key'),
-    cert: fs.readFileSync('Keys/server.cert')
+    key: fs.readFileSync('Keys/key.pem'),
+    cert: fs.readFileSync('Keys/cert.pem')
 };
 
 // Starting the HTTPS server
-https.createServer(options, app).listen(5000, () => {
-  console.log('Server running on https://localhost:5000');
+https.createServer(options, app).listen(5000, '0.0.0.0', () => {
+  console.log('Server running on https://0.0.0.0:5000');
 });
+
