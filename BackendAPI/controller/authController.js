@@ -128,10 +128,79 @@ const register = async (req, res) => {
     }
   };
 
+  const updateProfile = async (req, res) => {
+    const { userId } = req.params; // Patient's user ID from route parameters
+    const { email, phoneNumber, medicalAid, medicalAidNumber } = req.body; // Fields to be updated
+
+    // Check if the userId in the params matches the logged-in user's ID
+    if (userId !== req.user.id) {
+        return res.status(403).json({ message: 'You are not authorized to update this profile' });
+    }
+
+    try {
+        console.log("Update profile request received for userId:", userId);
+
+        // Find user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            console.log("No user found with userId:", userId);
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update only the fields that are provided
+        if (email) user.email = email;
+        if (phoneNumber) user.phoneNumber = phoneNumber;
+        if (medicalAid) user.medicalAid = medicalAid;
+        if (medicalAidNumber) user.medicalAidNumber = medicalAidNumber;
+
+        // Save updated user
+        await user.save();
+
+        console.log("Profile updated successfully for userId:", userId);
+        res.status(200).json({ message: 'Profile updated successfully', user });
+    } catch (error) {
+        console.error("Error updating profile:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// View Patient Profile - Staff Member
+const viewPatientProfile = async (req, res) => {
+  const { patientId } = req.params; // Assuming patientId is passed as a URL parameter
+
+  try {
+      console.log("View patient profile request for patientId:", patientId);
+
+      // Check if the logged-in user is a staff member
+      if (req.user.role !== 'staff') {
+          return res.status(403).json({ message: 'Access denied. Only staff members can view patient profiles.' });
+      }
+
+      // Find the patient by ID
+      const patient = await User.findById(patientId);
+      if (!patient) {
+          console.log("No patient found with ID:", patientId);
+          return res.status(404).json({ message: 'Patient not found' });
+      }
+
+      // Exclude the password field from the response
+      const { password, ...patientDetails } = patient._doc;
+
+      console.log("Patient profile retrieved successfully:", patientDetails);
+      res.status(200).json(patientDetails);
+  } catch (error) {
+      console.error("Error retrieving patient profile:", error);
+      res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 
   // Export the functions
    module.exports = {
     register,
     login,
     forgetPassword,
+    updateProfile,
+    viewPatientProfile ,
   };

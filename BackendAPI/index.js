@@ -22,7 +22,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/medicalHistory', medicalHistoryRoutes);
 
-
 // Start the reminder service
 sendReminders(); // Start the reminder service
 
