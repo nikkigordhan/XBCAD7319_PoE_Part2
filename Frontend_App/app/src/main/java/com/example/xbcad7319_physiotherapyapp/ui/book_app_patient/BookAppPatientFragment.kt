@@ -46,9 +46,7 @@ class BookAppPatientFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Toast.makeText(requireContext(), "Fragment created", Toast.LENGTH_SHORT).show()
-
-        val view = inflater.inflate(R.layout.fragment_book_app_patient, container, false)
+       val view = inflater.inflate(R.layout.fragment_book_app_patient, container, false)
 
         // Initialize views
         calendarView = view.findViewById(R.id.calendarView)
@@ -63,21 +61,18 @@ class BookAppPatientFragment : Fragment() {
         // Get the selected date from the CalendarView
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             selectedDate = "$year-${month + 1}-$dayOfMonth"
-            Toast.makeText(requireContext(), "Selected date: $selectedDate", Toast.LENGTH_SHORT).show()
+
         }
 
         // Save button click listener
         btnSave.setOnClickListener {
             val selectedTime = timeSpinner.selectedItem.toString()
             val description = descriptionEditText.text.toString()
-            Toast.makeText(requireContext(), "Save button clicked with date: $selectedDate, time: $selectedTime, description: $description", Toast.LENGTH_SHORT).show()
 
             if (selectedDate.isNotEmpty() && selectedTime.isNotEmpty() && description.isNotEmpty()) {
                 // Retrieve the logged-in user's userId
                 val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
                 val userId = "6709196e9bb6e3e845d1d159" //sharedPref.getString("userId", null) // Get userId from shared preferences
-
-                Toast.makeText(requireContext(), "Retrieved userId: $userId", Toast.LENGTH_SHORT).show()
 
                 if (userId != null) {
                     // Create an AppointmentRequest with the userId
@@ -87,8 +82,7 @@ class BookAppPatientFragment : Fragment() {
                         time = selectedTime,
                         description = description
                     )
-                    Toast.makeText(requireContext(), "Booking appointment: $appointmentRequest", Toast.LENGTH_SHORT).show()
-                    bookAppointment(appointmentRequest)
+                   bookAppointment(appointmentRequest)
                 } else {
                     Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
                 }
@@ -112,12 +106,10 @@ class BookAppPatientFragment : Fragment() {
         var hour = 8
         var minute = 0
 
-        Toast.makeText(requireContext(), "Populating time spinner", Toast.LENGTH_SHORT).show()
-        while (hour < 17 || (hour == 17 && minute == 0)) {
+       while (hour < 17 || (hour == 17 && minute == 0)) {
             val time = String.format("%02d:%02d %s", hour % 12, minute, if (hour < 12) "AM" else "PM")
             times.add(time)
-            Toast.makeText(requireContext(), "Adding time: $time", Toast.LENGTH_SHORT).show()
-            minute += 30
+           minute += 30
             if (minute >= 60) {
                 minute = 0
                 hour++
@@ -127,18 +119,15 @@ class BookAppPatientFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, times)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timeSpinner.adapter = adapter
-        Toast.makeText(requireContext(), "Time spinner populated with ${times.size} items", Toast.LENGTH_SHORT).show()
     }
 
     private fun bookAppointment(appointmentRequest: BookAppointmentRequest) {
         // Retrieve the Bearer token from Shared Preferences or your authentication manager
         val sharedPref = "670d375b32eb2e7855bd897a"
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDkxOTZlOWJiNmUzZTg0NWQxZDE1OSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzI5MDk4MjAzLCJleHAiOjE3MjkxMDE4MDN9.stATWoEbMYDKnRnwvd6jh1AgGZwwcSPmKgxhFX5gwuQ" //sharedPref.getString("bearerToken", null) // Replace with your token key
+        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDkxOTZlOWJiNmUzZTg0NWQxZDE1OSIsInJvbGUiOiJwYXRpZW50IiwiaWF0IjoxNzI5MTUxNjQwLCJleHAiOjE3MjkxNTUyNDB9.02Xo-Cxyl3_Ojvax3Cq3mEFk68Bu5GKt1zJ781Q9JSY" //sharedPref.getString("bearerToken", null) // Replace with your token key
 
         if (token.isNotEmpty()) {
             val call = apiService.bookAppointment("Bearer $token", appointmentRequest) // Pass the token
-
-            Toast.makeText(requireContext(), "Sending appointment request to API: $appointmentRequest", Toast.LENGTH_SHORT).show()
 
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -173,7 +162,6 @@ class BookAppPatientFragment : Fragment() {
 
             })
         } else {
-            Toast.makeText(requireContext(), "Authorization token is missing", Toast.LENGTH_SHORT).show()
             Log.e(TAG, "Authorization token is missing")
         }
     }
