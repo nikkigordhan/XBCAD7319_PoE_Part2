@@ -31,8 +31,11 @@ const options = {
     cert: fs.readFileSync('Keys/cert.pem')
 };
 
-// Starting the HTTPS server
-https.createServer(options, app).listen(5000, '0.0.0.0', () => {
-  console.log('Server running on https://0.0.0.0:5000');
+app.use(cors());
+
+https.createServer(options, app).listen(22, '0.0.0.0', () => {
+  console.log('Server running on https://0.0.0.0:22');
 });
+
+
 

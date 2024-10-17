@@ -18,7 +18,7 @@ import javax.net.ssl.X509TrustManager
 
 
 object ApiClient {
-    private const val BASE_URL = "https://10.0.0.113:5000"
+    private const val BASE_URL = "https://10.0.0.113:22"
     private var retrofit: Retrofit? = null
 
     fun getRetrofitInstance(context: Context): Retrofit {
