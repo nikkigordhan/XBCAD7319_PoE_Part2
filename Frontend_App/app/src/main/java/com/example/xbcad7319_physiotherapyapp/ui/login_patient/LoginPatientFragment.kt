@@ -1,23 +1,38 @@
 package com.example.xbcad7319_physiotherapyapp.ui.login_patient
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.InputType
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginPatientBinding
-
+import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
+import com.example.xbcad7319_physiotherapyapp.ui.ApiService
+import com.example.xbcad7319_physiotherapyapp.ui.LoginRequest
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginPatientFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = LoginPatientFragment()
-    }
-
     private var _binding: FragmentLoginPatientBinding? = null
     private val binding get() = _binding!!
+    private var passwordVisible: Boolean = false  // For password visibility toggle
+
+    private val TAG = "LoginPatientFragment"
+
+    // Create an instance of ApiService
+    private val apiService: ApiService by lazy {
+        ApiClient.getRetrofitInstance(requireContext()).create(ApiService::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,16 +45,100 @@ class LoginPatientFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set up forgot password click listener
-        binding.txtForgotPassword.setOnClickListener {
-            onForgotPasswordClicked(it)
+        // Handle password visibility toggle
+        binding.iconViewPassword.setOnClickListener {
+            togglePasswordVisibility()
         }
 
-        // add code logic here
+        // Handle login button click
+        binding.btnLogin.setOnClickListener {
+            loginUser()
+        }
+
+        // Handle forgot password button click
+        binding.txtForgotPassword.setOnClickListener {
+            onForgotPasswordClicked()
+        }
     }
 
-    private fun onForgotPasswordClicked(view: View) {
+    private fun loginUser() {
+        val username = binding.etxtUsername.text.toString().trim()
+        val password = binding.etxtPassword.text.toString().trim()
+
+        // Validate inputs
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            Toast.makeText(context, "Please enter both username and password", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Create a new LoginRequest object for login
+        val loginRequest = LoginRequest(
+            username = username,
+            password = password
+        )
+
+        // Call API to log in
+        loginUserToApi(loginRequest, username)  // Passing username for storing in SharedPreferences
+    }
+
+    private fun loginUserToApi(loginRequest: LoginRequest, username: String) {
+        val call = apiService.loginPatient(loginRequest)
+
+        Log.d(TAG, "Sending login request: $loginRequest")
+
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    // Handle successful login
+                    val token = response.body()?.string()  // Assuming token is in the response body
+
+                    // Store token and username in SharedPreferences
+                    val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        putString("bearerToken", token)
+                        putString("loggedInUsername", username)
+                        apply()
+                    }
+
+                    Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                    clearFields()
+
+                    // Navigate to the Home screen
+                    findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
+                } else {
+                    val errorResponse = response.errorBody()?.string() ?: "Unknown error"
+                    Log.e(TAG, "Login failed: HTTP ${response.code()} - $errorResponse")
+                    Toast.makeText(context, "Login failed: $errorResponse", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, "Error: ${t.message}", t)
+                Toast.makeText(context, "An error occurred: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun onForgotPasswordClicked() {
         findNavController().navigate(R.id.action_nav_login_patient_to_nav_forget_password_patient)
+    }
+
+    private fun togglePasswordVisibility() {
+        passwordVisible = !passwordVisible
+
+        if (passwordVisible) {
+            binding.etxtPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper visible icon
+        } else {
+            binding.etxtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Use proper hidden icon
+        }
+        binding.etxtPassword.setSelection(binding.etxtPassword.text.length)
+    }
+
+    private fun clearFields() {
+        binding.etxtUsername.text.clear()
+        binding.etxtPassword.text.clear()
     }
 
     override fun onDestroyView() {
