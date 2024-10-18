@@ -2,6 +2,7 @@ package com.example.xbcad7319_physiotherapyapp.ui.forget_password_patient
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.databinding.FragmentForgetPasswordPatientBinding
 import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
-import com.example.xbcad7319_physiotherapyapp.ui.PasswordUpdateRequest
+import com.example.xbcad7319_physiotherapyapp.ui.PasswordUpdateRequest // Ensure this import matches your project structure
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,6 +25,8 @@ class ForgetPasswordPatientFragment : Fragment() {
 
     private var _binding: FragmentForgetPasswordPatientBinding? = null
     private val binding get() = _binding!!
+
+    private var passwordVisible: Boolean = false
     private val TAG = "ForgetPasswordPatientFragment"
 
     // Create an instance of ApiService
@@ -40,8 +45,19 @@ class ForgetPasswordPatientFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSave.setOnClickListener { updatePassword() }
-        binding.btnCancel.setOnClickListener { clearFields() }
+        binding.btnSave.setOnClickListener {
+            updatePassword()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            clearFields()
+        }
+
+
+        // Handle password visibility toggle click
+        binding.iconViewPassword.setOnClickListener {
+            togglePasswordVisibility()
+        }
     }
 
     private fun updatePassword() {
@@ -76,6 +92,9 @@ class ForgetPasswordPatientFragment : Fragment() {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show()
                     clearFields() // Clear fields after successful update
+
+                    findNavController().navigate(R.id.action_nav_forget_password_patient_to_nav_login_patient)
+
                 } else {
                     val errorResponse = response.errorBody()?.string() ?: "Unknown error"
                     Log.e(TAG, "Failed to update password: HTTP ${response.code()} - $errorResponse")
@@ -99,5 +118,18 @@ class ForgetPasswordPatientFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun togglePasswordVisibility() {
+        passwordVisible = !passwordVisible
+
+        if (passwordVisible) {
+            binding.etxtNewPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Update to your visible icon
+        } else {
+            binding.etxtNewPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Set hidden icon
+        }
+        binding.etxtNewPassword.setSelection(binding.etxtNewPassword.text.length)
     }
 }
