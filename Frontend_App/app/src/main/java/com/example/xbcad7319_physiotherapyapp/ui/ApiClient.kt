@@ -19,8 +19,6 @@ import javax.net.ssl.X509TrustManager
 
 object ApiClient {
 
-    private const val BASE_URL = "http://192.168.0.5:3000"
-
     private const val BASE_URL = "http://10.0.2.2:3000"
 
     private var retrofit: Retrofit? = null
@@ -30,9 +28,6 @@ object ApiClient {
 
             retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
- login-patient-and-register-working
-
-
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
