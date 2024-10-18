@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import com.example.xbcad7319_physiotherapyapp.R
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.AppointmentDetails
@@ -59,6 +61,12 @@ class CancelAppPatientFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Please select an appointment to cancel", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Home button navigation
+        val ibtnHome: ImageButton = view.findViewById(R.id.ibtnHome)
+        ibtnHome.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_cancel_app_patient_to_nav_home_patient)
         }
 
         return view
