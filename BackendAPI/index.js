@@ -32,9 +32,5 @@ app.use(cors());
 // Create the HTTP server
 const port = 3000;
 http.createServer(app).listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log('Server is running on http://localhost:5000');
 });
-
-
-
-
