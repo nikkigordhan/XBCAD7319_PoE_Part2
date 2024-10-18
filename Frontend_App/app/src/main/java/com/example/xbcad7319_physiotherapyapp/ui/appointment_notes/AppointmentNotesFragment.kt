@@ -8,31 +8,35 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
+import android.content.Context
+import android.util.Log
+import android.widget.*
+import com.example.xbcad7319_physiotherapyapp.ui.ApiService
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AppointmentNotesFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AppointmentNotesFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_appointment_notes, container, false)
-    }
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_appointment_notes, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        // Initialize the ImageButton using the view
+        // Initialize the Home button
         val ibtnHome: ImageButton = view.findViewById(R.id.ibtnHome)
-
-        // Set OnClickListener for the Home button
         ibtnHome.setOnClickListener {
             findNavController().navigate(R.id.action_nav_app_notes_to_nav_home_staff)
         }
 
-        // add code logic here
+        return view
     }
+
+
 }
+
+

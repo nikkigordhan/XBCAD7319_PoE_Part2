@@ -101,6 +101,11 @@ class RescheduleAppPatientFragment : Fragment() {
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
+        // Home button navigation
+        val ibtnHome: ImageButton = view.findViewById(R.id.ibtnHome)
+        ibtnHome.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_reschedule_app_patient_to_nav_home_patient)
+        }
 
         return view
     }

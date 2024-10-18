@@ -35,8 +35,13 @@ interface ApiService {
         @Path("appointmentId") appointmentId: String
     ): Call<ResponseBody>
 
-    @GET("appointments/confirmed")
-    fun getConfirmedAppointmentsForPatient(): Call<List<AppointmentDetails>>
+    @GET("/notifications/patient")
+    fun getPatientNotifications(@Header("Authorization") token: String): Call<List<Notification>>
+
+    @GET("/notifications/staff")
+    fun getStaffNotifications(
+        @Header("Authorization") token: String
+    ): Call<List<Notification>>
 }
 
 
@@ -70,5 +75,18 @@ data class AppointmentDetails(
     val notes: String?,
     val status: String
 )
+
+data class Notification(
+    val appointmentId: String,
+    val patientId: String,
+    val message: String,
+    val date: String,
+    val time: String,
+    val description: String,
+    val status: String
+)
+
+
+
 
 
