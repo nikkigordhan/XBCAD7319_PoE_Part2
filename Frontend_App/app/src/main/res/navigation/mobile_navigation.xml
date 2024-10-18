@@ -247,13 +247,21 @@
         android:id="@+id/nav_forget_password_staff"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.forget_password_staff.ForgetPasswordStaffFragment"
         android:label="Forget Password"
-        tools:layout="@layout/fragment_forget_password_staff" />
+        tools:layout="@layout/fragment_forget_password_staff" >
+        <action
+            android:id="@+id/action_nav_forget_password_staff_to_nav_login_staff"
+            app:destination="@id/nav_login_staff" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_forget_password_patient"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.forget_password_patient.ForgetPasswordPatientFragment"
         android:label="Forget Password"
-        tools:layout="@layout/fragment_forget_password_patient" />
+        tools:layout="@layout/fragment_forget_password_patient" >
+        <action
+            android:id="@+id/action_nav_forget_password_patient_to_nav_login_patient"
+            app:destination="@id/nav_login_patient" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_intake_forms"

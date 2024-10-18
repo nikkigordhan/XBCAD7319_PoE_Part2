@@ -120,8 +120,13 @@ data class LoginRequest(
     var password: String
 )
 
+data class Form2(
+    val name: String,
+    val dryNeedlingConsent: String
+)
+
 data class PasswordUpdateRequest(
     val username: String,
-    val email: String,
+    val email: String? = null,
     val newPassword: String
 )
