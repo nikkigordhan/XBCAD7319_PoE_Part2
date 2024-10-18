@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_nav_login_patient_to_nav_forget_password_patient"
             app:destination="@id/nav_forget_password_patient" />
+        <action
+            android:id="@+id/action_nav_login_patient_to_nav_home_patient"
+            app:destination="@id/nav_home_patient" />
     </fragment>
 
 
@@ -52,6 +55,10 @@
         <action
             android:id="@+id/action_nav_home_patient_to_nav_app"
             app:destination="@id/nav_app" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_intake_forms"
+            app:destination="@id/nav_intake_forms" />
+
     </fragment>
 
     <fragment
@@ -221,6 +228,9 @@
         <action
             android:id="@+id/action_nav_login_staff_to_nav_forget_password_staff"
             app:destination="@id/nav_forget_password_staff" />
+        <action
+            android:id="@+id/action_nav_login_staff_to_nav_home_staff"
+            app:destination="@id/nav_home_staff" />
     </fragment>
 
 
@@ -228,7 +238,11 @@
         android:id="@+id/nav_register_patient"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.register_patient.RegisterPatientFragment"
         android:label="Register - Patient"
-        tools:layout="@layout/fragment_register_patient" />
+        tools:layout="@layout/fragment_register_patient" >
+        <action
+            android:id="@+id/action_nav_register_patient_to_nav_login_patient"
+            app:destination="@id/nav_login_patient" />
+    </fragment>
     <fragment
         android:id="@+id/nav_forget_password_staff"
         android:name="com.example.xbcad7319_physiotherapyapp.ui.forget_password_staff.ForgetPasswordStaffFragment"
@@ -240,6 +254,50 @@
         android:name="com.example.xbcad7319_physiotherapyapp.ui.forget_password_patient.ForgetPasswordPatientFragment"
         android:label="Forget Password"
         tools:layout="@layout/fragment_forget_password_patient" />
+
+    <fragment
+        android:id="@+id/nav_intake_forms"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.intake_forms.IntakeFormsFragment"
+        android:label="Intake Forms"
+        tools:layout="@layout/fragment_intake_forms">
+        <action
+            android:id="@+id/action_nav_intake_forms_to_nav_home_patient"
+            app:destination="@id/nav_home_patient" />
+
+        <action
+            android:id="@+id/action_nav_intake_forms_to_nav_form1"
+            app:destination="@id/nav_form1" />
+        <action
+            android:id="@+id/action_nav_intake_forms_to_nav_form2"
+            app:destination="@id/nav_form2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_form1"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.form1.Form1Fragment"
+        android:label="Form 1 Details"
+        tools:layout="@layout/fragment_form1">
+
+        <!-- Navigate from Form 1 back to Intake Forms -->
+        <action
+            android:id="@+id/action_nav_form1_to_nav_intake_forms"
+            app:destination="@id/nav_intake_forms" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_form2"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.form2.Form2Fragment"
+        android:label="Form 2 Details"
+        tools:layout="@layout/fragment_form2">
+
+        <action
+            android:id="@+id/action_nav_form2_to_nav_intake_forms"
+            app:destination="@id/nav_intake_forms" />
+
+    </fragment>
+
+
 
 
 </navigation>

@@ -36,7 +36,7 @@ class HomePatientFragment : Fragment() {
         val ibtnMedicalTests: ImageButton = view.findViewById(R.id.ibtnMedical_Tests)
         val ibtnPatientProfile: ImageButton = view.findViewById(R.id.ibtnProfile)
         val ibtnNotifications: ImageButton = view.findViewById(R.id.ibtnNotifications)
-
+        val ibtnIntakeForms: ImageButton = view.findViewById(R.id.ibtnIntake_Forms)
 
         // Set OnClickListener for the Medical History button
         ibtnAppointments.setOnClickListener {
@@ -57,6 +57,10 @@ class HomePatientFragment : Fragment() {
         // Set OnClickListener for the Notifications button
         ibtnNotifications.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_patient_to_nav_notifications_patient)
+        }
+        // Set OnClickListener for the Intake Forms button
+        ibtnIntakeForms.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_home_patient_to_nav_intake_forms)
         }
 
 

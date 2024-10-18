@@ -10,11 +10,17 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
-    //@POST("/api/auth/register")
-   // fun registerUser(@Body user: User): Call<ResponseBody>
+    @POST("api/auth/register")
+    fun registerPatient(@Body user: User): Call<ResponseBody>
 
-   // @POST("/api/auth/login")
-   // fun loginUser(@Body loginRequest: LoginRequest): Call<ResponseBody>
+    @POST("api/auth/login")
+    fun loginPatient(@Body loginRequest: LoginRequest): Call<ResponseBody>
+
+    @POST("api/auth/login")
+    fun loginStaff(@Body loginRequest: LoginRequest): Call<ResponseBody>
+
+    @POST("api/auth/forget-password")
+    fun updatePassword(@Body request: PasswordUpdateRequest): Call<ResponseBody>
 
     @POST("api/appointments/")
     fun bookAppointment(
@@ -63,4 +69,25 @@ data class AppointmentDetails(
     val status: String
 )
 
+data class User(
+    var username: String,
+    var password: String,
+    var role: String,
+    var name: String,
+    var surname: String,
+    var email: String,
+    var phoneNumber: String,
+    var medicalAid: String? = null,
+    var medicalAidNumber: String? = null
+)
 
+data class LoginRequest(
+    var username: String,
+    var password: String
+)
+
+data class PasswordUpdateRequest(
+    val username: String,
+    val email: String,
+    val newPassword: String
+)
