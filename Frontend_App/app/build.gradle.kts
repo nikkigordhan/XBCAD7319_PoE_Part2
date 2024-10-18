@@ -59,4 +59,12 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // read pdf
+//    implementation ("com.itextpdf:itext7-core:7.1.17")
+//    implementation ("androidx.sqlite:sqlite-ktx:2.1.0")
+
+   // implementation ("io.realm:realm-kotlin:0.8.0")
+
+
 }

@@ -10,6 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/iconViewPassword"
+            android:layout_width="50dp"
+            android:layout_height="44dp"
+            android:src="@drawable/visible_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.698"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.933" />
+
         <Button
             android:id="@+id/btnSave"
             android:layout_width="107dp"
@@ -21,10 +33,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.167"
+            app:layout_constraintHorizontal_bias="0.233"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.992" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/btnCancel"
@@ -37,10 +49,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.615"
+            app:layout_constraintHorizontal_bias="0.641"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.992" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/iLogo"
@@ -105,7 +117,7 @@
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.359" />
+            app:layout_constraintVertical_bias="0.345" />
 
         <TextView
             android:id="@+id/txtMedical_Aid"
@@ -117,19 +129,20 @@
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.57" />
+            app:layout_constraintVertical_bias="0.623" />
 
-        <TextView
-            android:id="@+id/txtMedical_Number"
-            android:layout_width="185dp"
-            android:layout_height="33dp"
-            android:text="Medical Number:"
+        <EditText
+            android:id="@+id/etxtUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.676" />
+            app:layout_constraintVertical_bias="0.842" />
 
         <TextView
             android:id="@+id/txtUsername"
@@ -141,7 +154,45 @@
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.785" />
+            app:layout_constraintVertical_bias="0.803" />
+
+        <EditText
+            android:id="@+id/etxtMedical_Aid_Number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.149"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.752" />
+
+        <EditText
+            android:id="@+id/etxtMedical_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.149"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.661" />
+
+        <TextView
+            android:id="@+id/txtMedical_Number"
+            android:layout_width="185dp"
+            android:layout_height="33dp"
+            android:text="Medical Number:"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.714" />
 
         <TextView
             android:id="@+id/txtPassword"
@@ -153,7 +204,7 @@
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.873" />
+            app:layout_constraintVertical_bias="0.888" />
 
         <TextView
             android:id="@+id/txtPhone_Number"
@@ -165,7 +216,19 @@
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.462" />
+            app:layout_constraintVertical_bias="0.438" />
+
+        <TextView
+            android:id="@+id/txtxEmail"
+            android:layout_width="185dp"
+            android:layout_height="33dp"
+            android:text="Email:"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.527" />
 
         <EditText
             android:id="@+id/etxtName"
@@ -181,19 +244,6 @@
             app:layout_constraintVertical_bias="0.285" />
 
         <EditText
-            android:id="@+id/etxtUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.149"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.823" />
-
-        <EditText
             android:id="@+id/etxtSurame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -204,20 +254,7 @@
             app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.39" />
-
-        <EditText
-            android:id="@+id/etxtMedical_Name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.149"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.609" />
+            app:layout_constraintVertical_bias="0.38" />
 
         <EditText
             android:id="@+id/etxtPhone_Number"
@@ -229,23 +266,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/etxtMedical_Aid_Number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.149"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.718" />
+            app:layout_constraintVertical_bias="0.47" />
 
         <EditText
-            android:id="@+id/extxPassword"
+            android:id="@+id/etxtPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -255,6 +280,19 @@
             app:layout_constraintHorizontal_bias="0.149"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.913" />
+            app:layout_constraintVertical_bias="0.934" />
+
+        <EditText
+            android:id="@+id/etxtEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.149"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.568" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
