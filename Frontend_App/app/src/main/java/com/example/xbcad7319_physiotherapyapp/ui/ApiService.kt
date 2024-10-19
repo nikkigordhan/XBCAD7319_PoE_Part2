@@ -9,6 +9,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import java.util.Date
 
 interface ApiService {
 
@@ -24,11 +25,18 @@ interface ApiService {
     @POST("api/auth/forget-password")
     fun updatePassword(@Body request: PasswordUpdateRequest): Call<ResponseBody>
 
+
+    @POST("api/form2/createForm2")
+    fun submitForm2Data(
+        @Body form2Request: Form2Request
+    ): Call<ResponseBody>
+
     @POST("/api/auth/register")
    fun registerUser(@Body user: User): Call<ResponseBody>
 
     @POST("/api/auth/login")
     fun loginUser(@Body loginRequest: LoginRequest): Call<ResponseBody>
+
 
 
     @POST("api/appointments/")
@@ -130,3 +138,11 @@ data class PasswordUpdateRequest(
     val email: String? = null,
     val newPassword: String
 )
+
+data class Form2Request(
+    val name: String,
+    val areasConcernedForNeedling: String ,
+    val date: Date
+)
+
+
