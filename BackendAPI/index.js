@@ -1,5 +1,5 @@
 const express = require('express');
-const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const cors = require('cors');
 const connectDB = require('./config/db');
@@ -25,17 +25,12 @@ app.use('/api/medicalHistory', medicalHistoryRoutes);
 // Start the reminder service
 sendReminders(); // Start the reminder service
 
-// HTTPS options (if you're using certificates for HTTPS)
-const options = {
-    key: fs.readFileSync('Keys/key.pem'),
-    cert: fs.readFileSync('Keys/cert.pem')
-};
 
 app.use(cors());
 
-https.createServer(options, app).listen(22, '0.0.0.0', () => {
-  console.log('Server running on https://0.0.0.0:22');
+
+// Create the HTTP server
+const port = 3000;
+http.createServer(app).listen(port, () => {
+  console.log('Server is running on http://localhost:5000');
 });
-
-
-

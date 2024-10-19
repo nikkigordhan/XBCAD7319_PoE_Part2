@@ -98,6 +98,12 @@ class BookAppPatientFragment : Fragment() {
             }
         }
 
+        // Home button navigation
+        val ibtnHome: ImageButton = view.findViewById(R.id.ibtnHome)
+        ibtnHome.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_book_app_patient_to_nav_home_patient)
+        }
+
         return view
     }
 

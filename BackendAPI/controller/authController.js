@@ -54,7 +54,7 @@ const register = async (req, res) => {
       const user = await User.findOne({ username });
       if (!user) {
         console.log("No user found with username:", username);
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(400).json({ message: 'Invalid username' });
       }
   
       // Check if password matches
@@ -62,9 +62,10 @@ const register = async (req, res) => {
       const isMatch = await user.matchPassword(password);
       if (!isMatch) {
         console.log("Invalid password for username:", username);
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(400).json({ message: 'Invalid password' });
       }
-  
+      
+   
       // Generate token
       console.log("Generating token for user:", username);
       const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
