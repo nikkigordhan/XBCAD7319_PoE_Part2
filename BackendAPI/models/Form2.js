@@ -1,15 +1,29 @@
 const mongoose = require('mongoose');
 
-// Define the schema for Form2
-const Form2Schema = new mongoose.Schema({
-  name: { type: String, required: true }, 
-  areasConcernedForNeedling: { type: String, required: true }, 
-  username: { type: String, required: true }, 
+const form2Schema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true, // Field is required
+        trim: true      // Trims whitespace from the input
+    },
+    areasConcernedForNeedling: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    date: {
+        type: Date,
+        required: true // Ensure the date is provided
+    },
+    signature: {
+        type: String,
+        required: true, // Ensure the signature is provided
+    }
 });
 
-// Create the model for Form2 using the schema
-const Form2 = mongoose.model('Form2', Form2Schema);
 
+// Create a model from the schema
+const Form2 = mongoose.model('Form2', form2Schema);
 
+// Export the model
 module.exports = Form2;
-
