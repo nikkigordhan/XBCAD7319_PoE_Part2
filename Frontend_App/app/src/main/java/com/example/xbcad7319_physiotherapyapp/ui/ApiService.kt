@@ -92,11 +92,6 @@ data class LoginRequest(
     var password: String
 )
 
-data class Form2(
-    val name: String,
-    val dryNeedlingConsent: String
-)
-
 data class PasswordUpdateRequest(
     val username: String,
     val email: String? = null,
@@ -105,8 +100,14 @@ data class PasswordUpdateRequest(
 
 data class Form2Request(
     val name: String,
-    val areasConcernedForNeedling: String ,
-    val date: Date
+    val areasConcernedForNeedling: String,
+    val date: Date,
+    val signature: String
 )
 
-
+data class Form2(
+    val name: String,
+    val areasConsented: String,
+    val date: Date,
+    val signature: String
+)
