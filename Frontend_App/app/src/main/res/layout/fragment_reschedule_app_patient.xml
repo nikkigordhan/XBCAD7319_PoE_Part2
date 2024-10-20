@@ -98,18 +98,6 @@
             app:layout_constraintVertical_bias="0.138" />
 
         <TextView
-            android:id="@+id/txtReschedule_Appointments"
-            android:layout_width="192dp"
-            android:layout_height="23dp"
-            android:text="Reschedule Appointments:"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.073"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.224" />
-
-        <TextView
             android:id="@+id/txtSelect_Time"
             android:layout_width="192dp"
             android:layout_height="23dp"
@@ -152,10 +140,10 @@
             android:text="Select an Appointment you want to reschedule:"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.857"
+            app:layout_constraintHorizontal_bias="0.714"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.256" />
+            app:layout_constraintVertical_bias="0.224" />
 
         <CalendarView
             android:id="@+id/calendarView"
@@ -196,14 +184,14 @@
 
         <ListView
             android:id="@+id/listAppointments"
-            android:layout_width="235dp"
-            android:layout_height="65dp"
+            android:layout_width="329dp"
+            android:layout_height="85dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.181"
+            app:layout_constraintHorizontal_bias="0.085"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.306" />
+            app:layout_constraintVertical_bias="0.271" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

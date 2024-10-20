@@ -1,6 +1,7 @@
 package com.example.xbcad7319_physiotherapyapp.ui.reschedule_app_patient
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -23,11 +24,15 @@ import com.example.xbcad7319_physiotherapyapp.ui.AppointmentDetails
 import com.example.xbcad7319_physiotherapyapp.ui.RescheduleAppointmentRequest
 import com.example.xbcad7319_physiotherapyapp.ui.RescheduleAppointmentResponse
 import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class RescheduleAppPatientFragment : Fragment() {
 
@@ -36,11 +41,12 @@ class RescheduleAppPatientFragment : Fragment() {
     private lateinit var descriptionEditText: EditText
     private lateinit var btnSave: Button
     private lateinit var btnCancel: Button
+    private lateinit var appointmentListView: ListView
+    private lateinit var sharedPref: SharedPreferences
 
-    private var selectedDate: Long = 0L // Will hold timestamp for the selected date
-    private var appointmentId: String = "" // Assume this comes from somewhere, passed in as an argument
+    private var selectedDate: Long = 0L
+    private var selectedAppointmentId: String? = null
 
-    // Create an instance of ApiService using the updated ApiClient
     private val apiService: ApiService by lazy {
         ApiClient.getRetrofitInstance(requireContext()).create(ApiService::class.java)
     }
@@ -53,122 +59,192 @@ class RescheduleAppPatientFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_reschedule_app_patient, container, false)
 
-        // Initialize views
+        sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+
         calendarView = view.findViewById(R.id.calendarView)
         timeSpinner = view.findViewById(R.id.spinner2)
         descriptionEditText = view.findViewById(R.id.etxtDescription)
         btnSave = view.findViewById(R.id.btnSave)
         btnCancel = view.findViewById(R.id.btnCancel)
+        appointmentListView = view.findViewById(R.id.listAppointments)
 
-        // Populate the time spinner with times from 8:00 AM to 4:30 PM every 30 minutes
         populateTimeSpinner()
+        fetchAndDisplayAppointments()
 
-        // Get the selected date from the CalendarView
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
-            selectedDate = calendar.timeInMillis // Save selected date as timestamp
+            selectedDate = calendar.timeInMillis
+            Log.d(TAG, "Selected date: $selectedDate")
         }
 
-        // Save button click listener
         btnSave.setOnClickListener {
             val selectedTime = timeSpinner.selectedItem.toString()
             val description = descriptionEditText.text.toString()
 
-            if (selectedDate != 0L && selectedTime.isNotEmpty() && description.isNotEmpty()) {
-                // Retrieve the logged-in user's userId
-                val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-                val userId = sharedPref.getString("userId", null)
+            if (validateInputs(selectedTime, description)) {
+                // Retrieve the JSON response from SharedPreferences
+                val tokenResponse = sharedPref.getString("bearerToken", null)
+                val username = sharedPref.getString("loggedInUsername", null)
 
-                if (userId != null) {
-                    // Create a RescheduleAppointmentRequest with the userId
-                    val rescheduleRequest = RescheduleAppointmentRequest(
-                        date = selectedDate,  // Timestamp of selected date
-                        time = selectedTime,
-                        description = description
-                    )
-                    rescheduleAppointment(rescheduleRequest)
+                Log.e(TAG, "Token response = $tokenResponse")
+
+                if (tokenResponse != null && username != null) {
+                    try {
+                        // Parse the JSON response to extract the token
+                        val jsonObject = JSONObject(tokenResponse)
+                        val token = jsonObject.getString("token")
+
+                        val rescheduleRequest = RescheduleAppointmentRequest(
+                            date = selectedDate,
+                            time = selectedTime,
+                            description = description
+                        )
+                        Log.d(TAG, "Rescheduling appointment with ID: $selectedAppointmentId")
+                        rescheduleAppointment(selectedAppointmentId!!, rescheduleRequest, token)
+                    } catch (e: JSONException) {
+                        Log.e(TAG, "Error parsing token: ${e.message}")
+                        showToast("Error parsing token")
+                    }
                 } else {
-                    Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+                    showToast("User not logged in")
                 }
-            } else {
-                val message = when {
-                    selectedDate == 0L -> "Please select a date"
-                    selectedTime.isEmpty() -> "Please select a time"
-                    description.isEmpty() -> "Please enter a description"
-                    else -> "Please fill in all fields"
-                }
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
-        // Home button navigation
-        val ibtnHome: ImageButton = view.findViewById(R.id.ibtnHome)
-        ibtnHome.setOnClickListener {
+
+
+        view.findViewById<ImageButton>(R.id.ibtnHome).setOnClickListener {
             findNavController().navigate(R.id.action_nav_reschedule_app_patient_to_nav_home_patient)
         }
 
         return view
     }
 
-    private fun populateTimeSpinner() {
-        val times = mutableListOf<String>()
-        var hour = 8
-        var minute = 0
-
-        while (hour < 17 || (hour == 17 && minute == 0)) {
-            val time = String.format("%02d:%02d %s", hour % 12, minute, if (hour < 12) "AM" else "PM")
-            times.add(time)
-            minute += 30
-            if (minute >= 60) {
-                minute = 0
-                hour++
+    private fun validateInputs(selectedTime: String, description: String): Boolean {
+        return when {
+            selectedAppointmentId == null -> {
+                showToast("Please select an appointment")
+                false
             }
+            selectedDate == 0L -> {
+                showToast("Please select a date")
+                false
+            }
+            selectedTime.isEmpty() -> {
+                showToast("Please select a time")
+                false
+            }
+            description.isEmpty() -> {
+                showToast("Please enter a description")
+                false
+            }
+            else -> true
         }
+    }
+
+    private fun fetchAndDisplayAppointments() {
+        val tokenResponse = sharedPref.getString("bearerToken", null)
+
+        tokenResponse?.let {
+            try {
+                val jsonObject = JSONObject(it)
+                val token = jsonObject.getString("token")
+
+                val call = apiService.getConfirmedAppointments("Bearer $token")
+                call.enqueue(object : Callback<List<AppointmentDetails>> {
+                    override fun onResponse(call: Call<List<AppointmentDetails>>, response: Response<List<AppointmentDetails>>) {
+                        if (response.isSuccessful) {
+                            response.body()?.let {
+                                populateListView(it)
+
+                            } ?: Log.d(TAG, "No appointments found")
+                        } else {
+                            Log.e(TAG, "Failed to load appointments: ${response.errorBody()?.string()}")
+                            showToast("Failed to load appointments")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<List<AppointmentDetails>>, t: Throwable) {
+                        Log.e(TAG, "Network error: ${t.message}")
+                        showToast("Network error")
+                    }
+                })
+            } catch (e: JSONException) {
+                Log.e(TAG, "Error parsing token: ${e.message}")
+                showToast("Error fetching appointments")
+            }
+        } ?: Log.d(TAG, "Token is null, user not logged in.")
+    }
+
+    private fun populateListView(appointments: List<AppointmentDetails>) {
+        // Map appointment details including the ID for display
+        val appointmentDescriptions = appointments.map { appointment ->
+            // Extract the date part from the date string
+            val datePart = appointment.date.split("T")[0] // This will give you '2024-10-22'
+
+            "Date: $datePart\nTime: ${appointment.time}\nDescription: ${appointment.description}"
+        }
+        Log.d(TAG, "Appointments for ListView: $appointmentDescriptions")
+
+        // Set the adapter with the updated appointment list
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, appointmentDescriptions)
+        appointmentListView.adapter = adapter
+
+        // Add click listener to list items
+        appointmentListView.setOnItemClickListener { parent, view, position, id ->
+            val selectedAppointment = appointments[position]
+            selectedAppointmentId = selectedAppointment.id  // Store the selected appointment ID
+            Log.d(TAG, "Selected appointment ID: $selectedAppointmentId")
+            showToast("Selected Appointment: ${selectedAppointment.id}")
+        }
+    }
+
+
+
+
+    private fun populateTimeSpinner() {
+        val times = listOf(
+            "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM",
+            "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
+            "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM",
+            "3:30 PM", "4:00 PM", "4:30 PM"
+        )
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, times)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         timeSpinner.adapter = adapter
     }
 
-    private fun rescheduleAppointment(rescheduleRequest: RescheduleAppointmentRequest) {
-        val token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // Replace with real token retrieval
 
-        if (token.isNotEmpty()) {
-            val call = apiService.rescheduleAppointment("Bearer $token", rescheduleRequest)
+    private fun rescheduleAppointment(appointmentId: String, rescheduleRequest: RescheduleAppointmentRequest, token: String) {
+        // Create a call to the API with the token in the header
+        val call = apiService.rescheduleAppointment("Bearer $token", appointmentId, rescheduleRequest)
 
-            call.enqueue(object : Callback<RescheduleAppointmentResponse> {
-                override fun onResponse(
-                    call: Call<RescheduleAppointmentResponse>,
-                    response: Response<RescheduleAppointmentResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val rescheduleResponse = response.body()
-                        rescheduleResponse?.let {
-                            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-
-                        }
-                    } else {
-                        val errorResponse = response.errorBody()?.string() ?: "Unknown error"
-                        Log.e(TAG, "Failed to reschedule appointment: HTTP ${response.code()} - $errorResponse")
-                        Toast.makeText(requireContext(), "Failed to reschedule: $errorResponse", Toast.LENGTH_SHORT).show()
+        call.enqueue(object : Callback<RescheduleAppointmentResponse> {
+            override fun onResponse(call: Call<RescheduleAppointmentResponse>, response: Response<RescheduleAppointmentResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        Log.d(TAG, "Appointment rescheduled: ${it.message}")
+                        showToast(it.message)
+                        findNavController().navigate(R.id.action_nav_reschedule_app_patient_to_nav_home_patient)
                     }
+                } else {
+                    Log.e(TAG, "Failed to reschedule appointment: ${response.errorBody()?.string()}")
+                    showToast("Failed to reschedule appointment")
                 }
+            }
 
-                override fun onFailure(call: Call<RescheduleAppointmentResponse>, t: Throwable) {
-                    Log.e(TAG, "Network error while rescheduling appointment: ${t.message}", t)
-                    if (t is IOException) {
-                        Toast.makeText(requireContext(), "Network error. Please check your connection.", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(requireContext(), "An unexpected error occurred: ${t.message}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
-        } else {
-            Log.e(TAG, "Authorization token is missing")
-        }
+            override fun onFailure(call: Call<RescheduleAppointmentResponse>, t: Throwable) {
+                Log.e(TAG, "Network error during rescheduling: ${t.message}")
+                showToast("Network error")
+            }
+        })
+    }
+
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
-
-
 
 
