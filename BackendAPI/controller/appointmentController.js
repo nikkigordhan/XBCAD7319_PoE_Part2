@@ -135,15 +135,15 @@ const getPatientNotifications = async (req, res) => {
 
         // Fetch all appointments for the logged-in patient within the next 24 hours
         const upcomingAppointments = await Appointment.find({
-            patient: req.user._id, // Only fetch appointments for the logged-in patient
-            date: { $gte: now, $lt: oneDayLater }, // Get appointments within the next 24 hours
-            status: 'confirmed' // Only notify for confirmed appointments happening tomorrow
+            patient: req.user._id,
+            date: { $gte: now, $lt: oneDayLater },
+            status: 'confirmed'
         }).populate('patient', 'name email');
 
         // Fetch all appointments with status changes (rescheduled, canceled, confirmed)
         const statusChangedAppointments = await Appointment.find({
             patient: req.user._id,
-            status: { $in: ['rescheduled', 'canceled', 'confirmed'] } // Notify about status changes
+            status: { $in: ['rescheduled', 'canceled', 'confirmed'] }
         }).populate('patient', 'name email');
 
         // Prepare notifications for upcoming appointments
@@ -160,11 +160,11 @@ const getPatientNotifications = async (req, res) => {
         const statusChangeNotifications = statusChangedAppointments.map(appointment => {
             let message;
             if (appointment.status === 'rescheduled') {
-                message = `Your appointment on ${appointment.date} has been rescheduled to ${appointment.date} at ${appointment.time}.`;
+                message = `Your appointment has been rescheduled.`;
             } else if (appointment.status === 'canceled') {
-                message = `Your appointment on ${appointment.date} has been canceled.`;
+                message = `Your appointment has been canceled.`;
             } else if (appointment.status === 'confirmed') {
-                message = `Your appointment on ${appointment.date} has been confirmed.`;
+                message = `Your appointment has been confirmed.`;
             }
 
             return {
@@ -180,16 +180,20 @@ const getPatientNotifications = async (req, res) => {
         // Combine both notifications
         const notifications = [...upcomingNotifications, ...statusChangeNotifications];
 
+        // Count the number of notifications
+        const notificationCount = notifications.length;
+
         if (!notifications.length) {
             return res.status(404).json({ message: 'No notifications found for this patient' });
         }
 
-        res.status(200).json(notifications);
+        res.status(200).json({ count: notificationCount, notifications });
     } catch (error) {
         console.error('Error fetching patient notifications:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 
 const getStaffNotifications = async (req, res) => {
     try {
@@ -231,20 +235,39 @@ const getStaffNotifications = async (req, res) => {
     }
 };
 
-// View all confirmed appointments for the logged-in patient
 const getConfirmedAppointmentsForPatient = async (req, res) => {
     try {
-        // Find all appointments for the logged-in patient with status "confirmed"
+        // Find all appointments for the logged-in patient with status "pending" or "confirmed"
         const appointments = await Appointment.find({
             patient: req.user._id, // Logged-in patient's ID
-            status: 'confirmed'   // Only confirmed appointments
-        }).populate('patient', 'name email'); 
+            status: { $in: ['pending', 'confirmed'] } // Only pending and confirmed appointments
+        }).select('_id patient date time description status') // Explicitly select fields to include appointment ID
+        .populate('patient', 'name email'); // Populate patient details
 
         if (!appointments.length) {
             return res.status(404).json({ message: 'No confirmed appointments found for this patient' });
         }
 
-        res.status(200).json(appointments);
+        res.status(200).json(appointments); // Send the response including the appointment ID
+    } catch (error) {
+        console.error('Error fetching confirmed appointments for patient:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+const getAllAppointmentsForPatient = async (req, res) => {
+    try {
+        // Find all appointments for the logged-in patient with status "pending" or "confirmed"
+        const appointments = await Appointment.find({
+            patient: req.user._id, // Logged-in patient's ID
+        }).select('_id patient date time description status') // Explicitly select fields to include appointment ID
+        .populate('patient', 'name email'); // Populate patient details
+
+        if (!appointments.length) {
+            return res.status(404).json({ message: 'No confirmed appointments found for this patient' });
+        }
+
+        res.status(200).json(appointments); // Send the response including the appointment ID
     } catch (error) {
         console.error('Error fetching confirmed appointments for patient:', error);
         res.status(500).json({ message: 'Server error' });
@@ -335,6 +358,7 @@ module.exports = {
     getStaffNotifications,
     getConfirmedAppointmentsForPatient, 
     getAllAppointments,
+    getAllAppointmentsForPatient,
     addAppointmentNotes,
     getAppointmentNotes,
 };
