@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.androidx.ui.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,11 +61,11 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // read pdf
-//    implementation ("com.itextpdf:itext7-core:7.1.17")
-//    implementation ("androidx.sqlite:sqlite-ktx:2.1.0")
+    //signiture
+    implementation ("com.github.gcacace:signature-pad:1.3.1")
 
-   // implementation ("io.realm:realm-kotlin:0.8.0")
+
+
 
 
 }
