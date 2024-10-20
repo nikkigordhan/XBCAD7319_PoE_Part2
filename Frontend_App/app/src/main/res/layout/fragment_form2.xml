@@ -108,8 +108,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Signature View -->
-
             <!-- Name Input -->
             <EditText
                 android:id="@+id/etxtName"
@@ -159,54 +157,57 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Save Button -->
+
+            <!-- Clear Signature Button -->
+
+            <!-- Cancel Button -->
+
+            <!-- Calendar View -->
+
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="107dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="1016dp"
+                android:layout_marginTop="1108dp"
                 android:backgroundTint="@color/blue"
                 android:text="Save"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.802"
+                app:layout_constraintHorizontal_bias="0.309"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Clear Signature Button -->
             <Button
-                android:id="@+id/btnClear"
-                android:layout_width="278dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="956dp"
+                android:id="@+id/btnClearSignature"
+                android:layout_width="241dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="1056dp"
                 android:backgroundTint="@color/blue"
                 android:text="Clear Signature"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.548"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Cancel Button -->
             <Button
                 android:id="@+id/btnCancel"
                 android:layout_width="107dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="1016dp"
+                android:layout_marginTop="1108dp"
                 android:backgroundTint="@color/blue"
                 android:text="Cancel"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.24"
+                app:layout_constraintHorizontal_bias="0.72"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Calendar View -->
             <CalendarView
                 android:id="@+id/calendarView2"
                 android:layout_width="332dp"
@@ -218,7 +219,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Signature View -->
+            <com.example.xbcad7319_physiotherapyapp.ui.SignatureView
+                android:id="@+id/signature_view"
+                android:layout_width="401dp"
+                android:layout_height="155dp"
+                android:layout_marginTop="884dp"
+                android:background="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </FrameLayout>
