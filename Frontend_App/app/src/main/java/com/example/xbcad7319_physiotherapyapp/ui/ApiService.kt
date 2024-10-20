@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui
 
+import com.google.gson.annotations.SerializedName
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -30,7 +31,6 @@ interface ApiService {
     @POST("/api/auth/login")
     fun loginUser(@Body loginRequest: LoginRequest): Call<ResponseBody>
 
-
     @POST("api/appointments/")
     fun bookAppointment(
         @Header("Authorization") token: String, // Add the authorization header
@@ -38,7 +38,8 @@ interface ApiService {
     ): Call<ResponseBody>
 
     @PUT("api/appointments/{appointmentId}")
-    fun rescheduleAppointment(
+ fun rescheduleAppointment(
+        @Header("Authorization") token: String,
         @Path("appointmentId") appointmentId: String,
         @Body rescheduleRequest: RescheduleAppointmentRequest
     ): Call<RescheduleAppointmentResponse>
@@ -49,13 +50,26 @@ interface ApiService {
         @Path("appointmentId") appointmentId: String
     ): Call<ResponseBody>
 
-    @GET("/notifications/patient")
-    fun getPatientNotifications(@Header("Authorization") token: String): Call<List<Notification>>
+    @GET("api/appointments/notifications/patient")
+    fun getPatientNotifications(
+        @Header("Authorization") token: String
+    ): Call<NotificationsResponse>
 
-    @GET("/notifications/staff")
+    @GET("api/appointments/notifications/staff")
     fun getStaffNotifications(
         @Header("Authorization") token: String
     ): Call<List<Notification>>
+
+    @GET("api/appointments/myappointments/confirmed")
+    fun getConfirmedAppointments(
+        @Header("Authorization") token: String
+    ): Call<List<AppointmentDetails>>
+
+    @GET("api/appointments/myappointments")
+    fun getAllAppointments(
+        @Header("Authorization") token: String
+    ): Call<List<AppointmentDetails>>
+
 }
 
 
@@ -80,7 +94,7 @@ data class RescheduleAppointmentResponse(
 
 
 data class AppointmentDetails(
-    val id: String,
+    @SerializedName("_id") val id: String,  // Map _id to id
     val patientName: String,
     val patientEmail: String,
     val date: String,
@@ -93,7 +107,6 @@ data class AppointmentDetails(
 
 data class Notification(
     val appointmentId: String,
-    val patientId: String,
     val message: String,
     val date: String,
     val time: String,
@@ -101,6 +114,9 @@ data class Notification(
     val status: String
 )
 
+data class NotificationsResponse(
+    val notifications: List<Notification>
+)
 
 data class User(
     var username: String,

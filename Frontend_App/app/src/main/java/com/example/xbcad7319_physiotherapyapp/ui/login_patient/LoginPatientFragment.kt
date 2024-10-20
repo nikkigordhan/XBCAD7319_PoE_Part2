@@ -1,6 +1,7 @@
 package com.example.xbcad7319_physiotherapyapp.ui.login_patient
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
@@ -26,7 +27,7 @@ class LoginPatientFragment : Fragment() {
     private var _binding: FragmentLoginPatientBinding? = null
     private val binding get() = _binding!!
     private var passwordVisible: Boolean = false  // For password visibility toggle
-
+    public lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginPatientFragment"
 
     // Create an instance of ApiService
@@ -93,12 +94,13 @@ class LoginPatientFragment : Fragment() {
                     val token = response.body()?.string()  // Assuming token is in the response body
 
                     // Store token and username in SharedPreferences
-                    val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                    sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
                     with(sharedPref.edit()) {
                         putString("bearerToken", token)
                         putString("loggedInUsername", username)
                         apply()
                     }
+                    Log.e(TAG, "Login successfull: Token=${token}")
 
                     Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
                     clearFields()
