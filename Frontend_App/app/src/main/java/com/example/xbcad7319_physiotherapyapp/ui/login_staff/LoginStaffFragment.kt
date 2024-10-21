@@ -1,6 +1,7 @@
 package com.example.xbcad7319_physiotherapyapp.ui.login_staff
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
@@ -17,6 +18,7 @@ import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.LoginRequest
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +28,7 @@ class LoginStaffFragment : Fragment() {
     private var _binding: FragmentLoginStaffBinding? = null
     private val binding get() = _binding!!
     private var passwordVisible: Boolean = false  // For password visibility toggle
-
+    private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginStaffFragment"
 
     // Create an instance of ApiService
@@ -71,7 +73,7 @@ class LoginStaffFragment : Fragment() {
             return
         }
 
-        // Create a new LoginRequest object for staff
+        // Create a new LoginRequest object for login
         val loginRequest = LoginRequest(
             username = username,
             password = password
@@ -89,21 +91,31 @@ class LoginStaffFragment : Fragment() {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    // Handle successful login
-                    val token = response.body()?.string()  // Assuming token is in the response body
+                    val responseBody = response.body()?.string()
+                    val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
+
+                    val token = jsonResponse.getString("token") // Extracting token
+                    val role = jsonResponse.getString("role") // Extracting user type
+
+                    // Check if the user type is "staff"
+                    if (role != "staff") {
+                        Toast.makeText(context, "Login failed: You are not authorized to access this app.", Toast.LENGTH_SHORT).show()
+                        return
+                    }
 
                     // Store token and username in SharedPreferences
-                    val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                    sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
                     with(sharedPref.edit()) {
                         putString("bearerToken", token)
                         putString("loggedInUsername", username)
                         apply()
                     }
+                    Log.e(TAG, "Login successful: Token=$token")
 
                     Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
                     clearFields()
 
-                    // Navigate to the Staff Home screen
+                    // Navigate to the Home screen
                     findNavController().navigate(R.id.action_nav_login_staff_to_nav_home_staff)
                 } else {
                     val errorResponse = response.errorBody()?.string() ?: "Unknown error"
@@ -128,10 +140,10 @@ class LoginStaffFragment : Fragment() {
 
         if (passwordVisible) {
             binding.etxtPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Set visible icon
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper visible icon
         } else {
             binding.etxtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Set hidden icon
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Use proper hidden icon
         }
         binding.etxtPassword.setSelection(binding.etxtPassword.text.length)
     }
