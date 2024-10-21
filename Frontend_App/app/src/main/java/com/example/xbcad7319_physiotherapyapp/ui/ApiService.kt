@@ -65,7 +65,7 @@ interface ApiService {
     @GET("api/appointments/notifications/staff")
     fun getStaffNotifications(
         @Header("Authorization") token: String
-    ): Call<List<Notification>>
+    ): Call<NotificationsResponse>
 
     @GET("api/appointments/myappointments/confirmed")
     fun getConfirmedAppointments(
