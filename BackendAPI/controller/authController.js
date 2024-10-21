@@ -195,6 +195,21 @@ const viewPatientProfile = async (req, res) => {
   }
 };
 
+// Logout function (handled mostly on the client-side)
+const logout = (req, res) => {
+  try {
+    console.log("Logout request received.");
+
+    // Clear the token (handled on the client-side in most implementations)
+    res.status(200).json({ message: 'Logout successful' });
+
+    // Alternatively, you can also instruct the client to remove the token from their storage
+    // You can optionally send a response that instructs the client to clear the token.
+  } catch (error) {
+    console.error("Error during logout:", error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
   // Export the functions
@@ -203,5 +218,6 @@ const viewPatientProfile = async (req, res) => {
     login,
     forgetPassword,
     updateProfile,
-    viewPatientProfile ,
+    viewPatientProfile,
+    logout,
   };
