@@ -1,0 +1,31 @@
+package com.example.PhysioTherapyApp.ui
+
+import android.content.Context
+
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+
+object ApiClient {
+
+    private const val BASE_URL = "http://192.168.0.5:5000"
+
+    private var retrofit: Retrofit? = null
+
+    fun getRetrofitInstance(context: Context): Retrofit {
+        if (retrofit == null) {
+
+            retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+        return retrofit!!
+    }
+
+
+}
+
+
+
+
