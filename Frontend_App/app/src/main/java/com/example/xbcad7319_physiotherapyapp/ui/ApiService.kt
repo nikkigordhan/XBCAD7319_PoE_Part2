@@ -72,10 +72,17 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<List<AppointmentDetails>>
 
-    @GET("api/appointments/myappointments")
+    @GET("api/appointments//allappointments")
     fun getAllAppointments(
         @Header("Authorization") token: String
     ): Call<List<AppointmentDetails>>
+
+    // New approve appointment method
+    @PUT("api/appointments/{appointmentId}/approve")
+    fun approveAppointment(
+        @Header("Authorization") token: String,
+        @Path("appointmentId") appointmentId: String
+    ): Call<ResponseBody>
 
 }
 
