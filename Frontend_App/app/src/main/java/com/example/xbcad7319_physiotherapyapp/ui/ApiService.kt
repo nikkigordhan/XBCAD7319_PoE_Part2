@@ -32,11 +32,18 @@ interface ApiService {
         @Body form2Request: Form2Request
     ): Call<ResponseBody>
 
+
+    @POST("api/form2/createForm1")
+    fun submitForm1Data(
+        @Body form1Request: Form1Request
+    ): Call<ResponseBody>
+
     @POST("/api/auth/register")
    fun registerUser(@Body user: User): Call<ResponseBody>
 
     @POST("/api/auth/login")
     fun loginUser(@Body loginRequest: LoginRequest): Call<ResponseBody>
+
 
     @POST("api/appointments/")
     fun bookAppointment(
@@ -181,3 +188,40 @@ data class Form2(
     val date: Date,
     val signature: String
 )
+
+
+data class Form1Request(
+    val firstNameP: String,
+    val surnameP: String,
+    val titleP: String?,
+    val idP: String,
+    val ageP: Int,
+    val addressP: String,
+    val codeP: String,
+    val cellNumberP: String,
+    val workNumberP: String?,
+    val homeNumberP: String?,
+    val emailP: String,
+    val medicalAidNameP: String? = null,
+    val medicalAidNumberP: String? = null,
+    val firstNameR: String? = null,
+    val surnameR: String? = null,
+    val titleR: String? = null,
+    val idR: String? = null,
+    val ageR: String? = null,
+    val addressR: String? = null,
+    val codeR: String? = null,
+    val cellNumberR: String? = null,
+    val workNumberR: String? = null,
+    val homeNumberR: String? = null,
+    val emailR: String? = null,
+    val firstNameK: String,
+    val addressK: String,
+    val codeK: String,
+    val nameS: String,
+    val typeS: String,
+    val signature: String?, // Assuming signature is a String, change if it's different
+    val placeS: String,
+    val date: Date // The formatted date from the CalendarView
+)
+
