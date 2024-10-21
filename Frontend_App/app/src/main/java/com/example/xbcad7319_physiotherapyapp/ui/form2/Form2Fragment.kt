@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.form2
 
+import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
@@ -17,7 +18,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
-import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
+
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.Form2Request
 import com.example.xbcad7319_physiotherapyapp.ui.SignatureView

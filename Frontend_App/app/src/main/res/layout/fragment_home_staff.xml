@@ -10,6 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="119dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@color/blue"
+            android:text="Logout"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.992" />
+
         <ImageButton
             android:id="@+id/ibtnPatient_Notes"
             android:layout_width="355dp"
@@ -21,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.649" />
+            app:layout_constraintVertical_bias="0.61" />
 
         <ImageButton
             android:id="@+id/ibtnAppointments"
@@ -32,10 +48,10 @@
             android:src="@drawable/appointments"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.088"
+            app:layout_constraintHorizontal_bias="0.087"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.352" />
+            app:layout_constraintVertical_bias="0.337" />
 
         <ImageButton
             android:id="@+id/ibtnPatient_Profile"
@@ -46,10 +62,10 @@
             android:src="@drawable/patient_profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.086"
+            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.937" />
+            app:layout_constraintVertical_bias="0.893" />
 
         <ImageButton
             android:id="@+id/ibtnBilling"
@@ -60,10 +76,10 @@
             android:src="@drawable/billing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.883"
+            app:layout_constraintHorizontal_bias="0.886"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.937" />
+            app:layout_constraintVertical_bias="0.893" />
 
         <ImageButton
             android:id="@+id/ibtnNotifications"
@@ -74,10 +90,10 @@
             android:src="@drawable/notifications"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.895"
+            app:layout_constraintHorizontal_bias="0.887"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.352" />
+            app:layout_constraintVertical_bias="0.337" />
 
         <ImageView
             android:id="@+id/iLogo"
@@ -132,7 +148,7 @@
             app:layout_constraintHorizontal_bias="0.071"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.448" />
+            app:layout_constraintVertical_bias="0.438" />
 
         <TextView
             android:id="@+id/txtPatient_Notes"
@@ -145,7 +161,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.703" />
+            app:layout_constraintVertical_bias="0.682" />
 
         <TextView
             android:id="@+id/txtNotifications"
@@ -159,7 +175,7 @@
             app:layout_constraintHorizontal_bias="0.906"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.448" />
+            app:layout_constraintVertical_bias="0.438" />
 
         <TextView
             android:id="@+id/txtPatient_Profile"
@@ -170,10 +186,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.067"
+            app:layout_constraintHorizontal_bias="0.068"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.931" />
+            app:layout_constraintVertical_bias="0.901" />
 
         <TextView
             android:id="@+id/txtBilling"
@@ -184,10 +200,10 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.903"
+            app:layout_constraintHorizontal_bias="0.906"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.932" />
+            app:layout_constraintVertical_bias="0.901" />
 
         <TextView
             android:id="@+id/txtNotificationCount"

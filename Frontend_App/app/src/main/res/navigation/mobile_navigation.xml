@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_nav_home_patient_to_nav_intake_forms"
             app:destination="@id/nav_intake_forms" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_main_menu"
+            app:destination="@id/nav_main_menu" />
 
     </fragment>
 
@@ -170,6 +173,9 @@
         <action
             android:id="@+id/action_nav_home_staff_to_nav_app_staff"
             app:destination="@id/nav_app_staff" />
+        <action
+            android:id="@+id/action_nav_home_staff_to_nav_main_menu"
+            app:destination="@id/nav_main_menu" />
 
     </fragment>
 

@@ -1,4 +1,4 @@
-package com.example.xbcad7319_physiotherapyapp.ui.app_patient
+package com.example.xbcad7319_physiotherapyapp.ui.app_patient.app_patient
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
