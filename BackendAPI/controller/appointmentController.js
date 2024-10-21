@@ -65,24 +65,34 @@ const rescheduleAppointment = async (req, res) => {
 // Cancel an appointment
 const cancelAppointment = async (req, res) => {
     const appointmentId = req.params.appointmentId.trim();
+    console.log(`Attempting to cancel appointment with ID: ${appointmentId}`);
 
     try {
         const appointment = await Appointment.findById(appointmentId);
+        console.log('Fetched appointment:', appointment);
 
         if (!appointment) {
+            console.log('Appointment not found');
             return res.status(404).json({ message: 'Appointment not found' });
         }
 
-        // Verify if the logged-in user has permission to cancel this appointment
-        if (appointment.patient.toString() !== req.user._id.toString()) {
+        // Check if the appointment is already canceled
+        if (appointment.status === 'canceled') {
+            console.log('Appointment is already canceled');
+            return res.status(400).json({ message: 'This appointment has already been canceled' });
+        }
+
+        // Check if the logged-in user is the patient or a staff member
+        if (appointment.patient.toString() !== req.user._id.toString() && req.user.role !== 'staff') {
+            console.log('Permission denied: user is not authorized to cancel this appointment');
             return res.status(403).json({ message: 'You do not have permission to cancel this appointment' });
         }
 
         // Mark the appointment as canceled instead of deleting it
         appointment.status = 'canceled';
-
         await appointment.save();
 
+        console.log('Appointment canceled successfully');
         res.status(200).json({ message: 'Appointment canceled successfully' });
     } catch (error) {
         console.error('Error canceling appointment:', error);
@@ -93,29 +103,40 @@ const cancelAppointment = async (req, res) => {
 // Approve an appointment
 const approveAppointment = async (req, res) => {
     const appointmentId = req.params.appointmentId.trim();
+    console.log(`Attempting to approve appointment with ID: ${appointmentId}`);
 
     try {
-        const appointment = await Appointment.findById(appointmentId).populate('patient', 'name email'); // Populate patient details
+        const appointment = await Appointment.findById(appointmentId).populate('patient', 'name email');
+        console.log('Fetched appointment:', appointment);
 
         if (!appointment) {
+            console.log('Appointment not found');
             return res.status(404).json({ message: 'Appointment not found' });
         }
 
-        // Verify if the logged-in user is a staff member
-        if (!req.user.isStaff) {
-            return res.status(403).json({ message: 'You do not have permission to approve this appointment' });
+        // Check if the appointment is already confirmed
+        if (appointment.status === 'approved') {
+            console.log('Appointment is already approved');
+            return res.status(400).json({ message: 'This appointment is already confirmed' });
         }
 
-        // Ensure the appointment is still pending
-        if (appointment.status !== 'pending') {
-            return res.status(400).json({ message: 'Appointment cannot be approved as it is not pending' });
+        // Check if the appointment is canceled
+        if (appointment.status === 'canceled') {
+            console.log('Cannot approve a canceled appointment');
+            return res.status(400).json({ message: 'This appointment has been canceled and cannot be approved' });
+        }
+
+        // Verify if the logged-in user is a staff member
+        if (req.user.role !== 'staff') {
+            console.log('Permission denied: user is not authorized to approve this appointment');
+            return res.status(403).json({ message: 'You do not have permission to approve this appointment' });
         }
 
         // Update the appointment status to 'approved'
         appointment.status = 'approved';
-
         await appointment.save();
 
+        console.log('Appointment approved successfully');
         res.status(200).json({
             message: 'Appointment approved successfully',
             appointment,
