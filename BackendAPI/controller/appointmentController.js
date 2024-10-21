@@ -197,24 +197,41 @@ const getPatientNotifications = async (req, res) => {
 
 const getStaffNotifications = async (req, res) => {
     try {
-        // Fetch all appointments that are either pending, rescheduled, or canceled
-        const appointments = await Appointment.find({
-            status: { $in: ['pending', 'rescheduled', 'canceled'] } // Include all relevant statuses
-        }).populate('patient', 'name email'); // Populate patient details for notifications
+        const now = new Date();
+        const oneDayLater = new Date(now);
+        oneDayLater.setDate(now.getDate() + 1);
 
-        if (!appointments.length) {
-            return res.status(404).json({ message: 'No notifications found for staff' });
-        }
+        // Fetch all upcoming appointments within the next 24 hours with confirmed status
+        const upcomingAppointments = await Appointment.find({
+            status: 'confirmed',
+            date: { $gte: now, $lt: oneDayLater }
+        }).populate('patient', 'name email'); // Populate patient details
 
-        // Prepare notifications for staff based on appointment status
-        const staffNotifications = appointments.map(appointment => {
+        // Fetch appointments with status changes (pending, rescheduled, canceled)
+        const statusChangedAppointments = await Appointment.find({
+            status: { $in: ['pending', 'rescheduled', 'canceled'] }
+        }).populate('patient', 'name email'); // Populate patient details
+
+        // Prepare notifications for upcoming confirmed appointments
+        const upcomingNotifications = upcomingAppointments.map(appointment => ({
+            appointmentId: appointment._id,
+            patientId: appointment.patient._id,
+            message: `Reminder: ${appointment.patient.name} has a confirmed appointment tomorrow at ${appointment.time}.`,
+            date: appointment.date,
+            time: appointment.time,
+            description: appointment.description,
+            status: appointment.status
+        }));
+
+        // Prepare notifications for status changes (pending, rescheduled, canceled)
+        const statusChangeNotifications = statusChangedAppointments.map(appointment => {
             let message;
             if (appointment.status === 'pending') {
-                message = `New appointment for ${appointment.patient.name} on ${appointment.date} at ${appointment.time} is pending confirmation.`;
+                message = `New appointment for ${appointment.patient.name} is pending confirmation.`;
             } else if (appointment.status === 'rescheduled') {
-                message = `Appointment for ${appointment.patient.name} has been rescheduled to ${appointment.date} at ${appointment.time}.`;
+                message = `Appointment for ${appointment.patient.name} has been rescheduled.`;
             } else if (appointment.status === 'canceled') {
-                message = `Appointment for ${appointment.patient.name} on ${appointment.date} has been canceled.`;
+                message = `Appointment for ${appointment.patient.name} has been canceled.`;
             }
 
             return {
@@ -228,12 +245,23 @@ const getStaffNotifications = async (req, res) => {
             };
         });
 
-        res.status(200).json(staffNotifications);
+        // Combine both types of notifications
+        const notifications = [...upcomingNotifications, ...statusChangeNotifications];
+
+        // Count the number of notifications
+        const notificationCount = notifications.length;
+
+        if (!notificationCount) {
+            return res.status(404).json({ message: 'No notifications found for staff' });
+        }
+
+        res.status(200).json({ count: notificationCount, notifications });
     } catch (error) {
         console.error('Error fetching staff notifications:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
 
 const getConfirmedAppointmentsForPatient = async (req, res) => {
     try {
