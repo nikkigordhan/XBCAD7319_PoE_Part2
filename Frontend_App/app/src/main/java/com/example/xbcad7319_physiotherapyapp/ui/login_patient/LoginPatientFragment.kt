@@ -27,7 +27,11 @@ class LoginPatientFragment : Fragment() {
 
     private var _binding: FragmentLoginPatientBinding? = null
     private val binding get() = _binding!!
+
     private var passwordVisible: Boolean = false
+
+    private var passwordVisible: Boolean = false  // For password visibility toggle
+
     private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginPatientFragment"
 
@@ -89,7 +93,35 @@ class LoginPatientFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()?.string()
+
                     handleLoginResponse(responseBody, username)
+
+                    val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
+
+                    val token = jsonResponse.getString("token") // Extracting token
+                    val role = jsonResponse.getString("role") // Extracting user type
+
+                    // Check if the user type is "patient"
+                    if (role != "patient") {
+                        Toast.makeText(context, "Login failed: You are not authorized to access this app.", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+
+                    // Store token and username in SharedPreferences
+                    sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        putString("bearerToken", token)
+                        putString("loggedInUsername", username)
+                        apply()
+                    }
+                    Log.e(TAG, "Login successful: Token=$token")
+
+                    Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                    clearFields()
+
+                    // Navigate to the Home screen
+                    findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
+
                 } else {
                     handleErrorResponse(response)
                 }
