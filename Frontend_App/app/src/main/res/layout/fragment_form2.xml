@@ -221,7 +221,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Signature View -->
-            <com.example.xbcad7319_physiotherapyapp.ui.SignatureView
+            <com.example.PhysioTherapyApp.ui.SignatureView
                 android:id="@+id/signature_view"
                 android:layout_width="401dp"
                 android:layout_height="155dp"
