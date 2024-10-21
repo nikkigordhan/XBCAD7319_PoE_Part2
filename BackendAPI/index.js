@@ -1,5 +1,7 @@
 const express = require('express');
-const http = require('http');
+// const http = require('http');
+const https = require('https');
+const fs = require('fs');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
@@ -34,8 +36,17 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Create the HTTP server
-const port = process.env.PORT || 3000; // Use environment variable or default to 3000
-http.createServer(app).listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+const sslOptions = {
+  key: fs.readFileSync('Keys/key.pem'),
+  cert: fs.readFileSync('Keys/cert.pem')
+};
+
+https.createServer(sslOptions, app).listen(5000, () => {
+  console.log('Secure server running on https://localhost:5000');
 });
+
+// Create the HTTP server
+// const port = process.env.PORT || 3000; // Use environment variable or default to 3000
+// http.createServer(app).listen(port, () => {
+//   console.log(`Server is running on http://localhost:${port}`);
+// });
