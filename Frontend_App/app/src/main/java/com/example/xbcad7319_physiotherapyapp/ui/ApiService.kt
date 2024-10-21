@@ -1,8 +1,10 @@
 package com.example.xbcad7319_physiotherapyapp.ui
 
+import com.google.gson.annotations.SerializedName
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -11,6 +13,7 @@ import retrofit2.http.Path
 import java.util.Date
 
 interface ApiService {
+
     @POST("api/auth/register")
     fun registerPatient(@Body user: User): Call<ResponseBody>
 
@@ -23,15 +26,24 @@ interface ApiService {
     @POST("api/auth/forget-password")
     fun updatePassword(@Body request: PasswordUpdateRequest): Call<ResponseBody>
 
+
     @POST("api/form2/createForm2")
     fun submitForm2Data(
         @Body form2Request: Form2Request
     ): Call<ResponseBody>
 
+
     @POST("api/form2/createForm1")
     fun submitForm1Data(
         @Body form1Request: Form1Request
     ): Call<ResponseBody>
+
+    @POST("/api/auth/register")
+   fun registerUser(@Body user: User): Call<ResponseBody>
+
+    @POST("/api/auth/login")
+    fun loginUser(@Body loginRequest: LoginRequest): Call<ResponseBody>
+
 
     @POST("api/appointments/")
     fun bookAppointment(
@@ -39,14 +51,58 @@ interface ApiService {
         @Body appointmentRequest: BookAppointmentRequest
     ): Call<ResponseBody>
 
-    @PUT("ap/appointments/{appointmentId}/reschedule")
-    fun rescheduleAppointment(
+    @PUT("api/appointments/{appointmentId}")
+ fun rescheduleAppointment(
+        @Header("Authorization") token: String,
         @Path("appointmentId") appointmentId: String,
         @Body rescheduleRequest: RescheduleAppointmentRequest
     ): Call<RescheduleAppointmentResponse>
 
-    @GET("appointments/confirmed")
-    fun getConfirmedAppointmentsForPatient(): Call<List<AppointmentDetails>>
+    @DELETE("api/appointments/{appointmentId}")
+    fun cancelAppointment(
+        @Header("Authorization") token: String,
+        @Path("appointmentId") appointmentId: String
+    ): Call<ResponseBody>
+
+    @GET("api/appointments/notifications/patient")
+    fun getPatientNotifications(
+        @Header("Authorization") token: String
+    ): Call<NotificationsResponse>
+
+    @GET("api/appointments/notifications/staff")
+    fun getStaffNotifications(
+        @Header("Authorization") token: String
+    ): Call<NotificationsResponse>
+
+    @GET("api/appointments/myappointments/confirmed")
+    fun getConfirmedAppointments(
+        @Header("Authorization") token: String
+    ): Call<List<AppointmentDetails>>
+
+    @GET("api/appointments/myappointments/Allconfirmed")
+    fun getAllConfirmedAppointments(
+        @Header("Authorization") token: String
+    ): Call<List<AppointmentDetails>>
+
+    @GET("api/appointments//allappointments")
+    fun getAllAppointments(
+        @Header("Authorization") token: String
+    ): Call<List<AppointmentDetails>>
+
+    // New approve appointment method
+    @PUT("api/appointments/{appointmentId}/approve")
+    fun approveAppointment(
+        @Header("Authorization") token: String,
+        @Path("appointmentId") appointmentId: String
+    ): Call<ResponseBody>
+
+    @PUT("api/appointments/{appointmentId}/notes")
+    fun addAppointmentNotes(
+        @Header("Authorization") token: String,
+        @Path("appointmentId") appointmentId: String,
+        @Body requestBody: Map<String, String> // Or use a data class
+    ): Call<ResponseBody>
+
 }
 
 
@@ -69,8 +125,9 @@ data class RescheduleAppointmentResponse(
     val appointment: AppointmentDetails
 )
 
+
 data class AppointmentDetails(
-    val id: String,
+    @SerializedName("_id") val id: String,  // Map _id to id
     val patientName: String,
     val patientEmail: String,
     val date: String,
@@ -78,6 +135,20 @@ data class AppointmentDetails(
     val description: String?,
     val notes: String?,
     val status: String
+)
+
+
+data class Notification(
+    val appointmentId: String,
+    val message: String,
+    val date: String,
+    val time: String,
+    val description: String,
+    val status: String
+)
+
+data class NotificationsResponse(
+    val notifications: List<Notification>
 )
 
 data class User(
@@ -91,6 +162,7 @@ data class User(
     var medicalAid: String? = null,
     var medicalAidNumber: String? = null
 )
+
 
 data class LoginRequest(
     var username: String,

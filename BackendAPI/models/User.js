@@ -6,12 +6,12 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ['patient', 'staff']},
   // For patients only:
-  name: { type: String },
-  surname: { type: String },
-  email: { type: String },
-  phoneNumber: { type: String },
-  medicalAid: { type: Boolean },
-  medicalAidNumber: { type: String },
+  name: { type: String, required: true },
+  surname: { type: String, required: true },
+  email: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  medicalAid: { type: String, required: false },
+  medicalAidNumber: { type: String, required: false },
 });
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {

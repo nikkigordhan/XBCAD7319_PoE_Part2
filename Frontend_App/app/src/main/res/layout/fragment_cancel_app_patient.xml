@@ -107,8 +107,8 @@
 
         <ListView
             android:id="@+id/listAppointments"
-            android:layout_width="254dp"
-            android:layout_height="162dp"
+            android:layout_width="410dp"
+            android:layout_height="166dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.401"
