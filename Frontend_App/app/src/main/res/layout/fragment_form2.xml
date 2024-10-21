@@ -183,13 +183,14 @@
                 android:id="@+id/btnClearSignature"
                 android:layout_width="241dp"
                 android:layout_height="44dp"
-                android:layout_marginTop="1056dp"
+                android:layout_marginTop="1044dp"
                 android:backgroundTint="@color/blue"
                 android:text="Clear Signature"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.117"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

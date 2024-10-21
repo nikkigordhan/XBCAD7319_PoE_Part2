@@ -35,18 +35,23 @@ class IntakeFormsFragment : Fragment() {
         val btnForm2PDF: Button = view.findViewById(R.id.btnForm2PDF)
         val btnForm2: Button = view.findViewById(R.id.btnForm2)
 
+        Log.d("IntakeFormsFragment", "UI elements initialized")
+
         // Set OnClickListener for the Home button
         ibtnHome.setOnClickListener {
+            Log.d("IntakeFormsFragment", "Home button clicked")
             findNavController().navigate(R.id.action_nav_intake_forms_to_nav_home_patient)
         }
 
         // Set OnClickListener for the Form 1 button
         btnForm1.setOnClickListener {
+            Log.d("IntakeFormsFragment", "Form 1 button clicked")
             findNavController().navigate(R.id.action_nav_intake_forms_to_nav_form1)
         }
 
         // Set OnClickListener for the Form 2 button
         btnForm2.setOnClickListener {
+            Log.d("IntakeFormsFragment", "Form 2 button clicked")
             findNavController().navigate(R.id.action_nav_intake_forms_to_nav_form2)
         }
 
@@ -69,6 +74,8 @@ class IntakeFormsFragment : Fragment() {
 
     private fun openPdfFromAssets(fileName: String) {
         try {
+            Log.d("IntakeFormsFragment", "Attempting to open PDF: $fileName")
+
             // Get the input stream for the PDF file from assets
             val assetManager = requireContext().assets
             val inputStream: InputStream = assetManager.open(fileName)
@@ -82,12 +89,13 @@ class IntakeFormsFragment : Fragment() {
             outputStream.close()
             inputStream.close()
 
+            Log.d("IntakeFormsFragment", "PDF copied to temp file successfully")
+
             // Open the PDF using an external viewer
             openPdfInExternalViewer(tempFile)
 
         } catch (e: IOException) {
-            e.printStackTrace()
-            Log.e("IntakeFormsFragment", "Error opening PDF: ${e.message}")
+            Log.e("IntakeFormsFragment", "Error opening PDF: ${e.message}", e)
         }
     }
 
@@ -105,9 +113,10 @@ class IntakeFormsFragment : Fragment() {
         }
 
         try {
+            Log.d("IntakeFormsFragment", "Opening PDF in external viewer")
             startActivity(intent)
         } catch (e: Exception) {
-            Log.e("IntakeFormsFragment", "No application available to view PDF: ${e.message}")
+            Log.e("IntakeFormsFragment", "No application available to view PDF: ${e.message}", e)
         }
     }
 }
