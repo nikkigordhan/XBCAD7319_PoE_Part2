@@ -341,31 +341,51 @@ const getAllAppointments = async (req, res) => {
     }
 };
 
-// Add Appointment Notes
+const getConfirmedAppointments = async (req, res) => {
+    try {
+        // Find all confirmed appointments 
+        const appointments = await Appointment.find({
+          status: { $in: ['approved'] } // Only  confirmed appointments
+        }).select('_id patient date time description status') // Explicitly select fields to include appointment ID
+        .populate('patient', 'name email'); // Populate patient details
+
+        if (!appointments.length) {
+            return res.status(404).json({ message: 'No confirmed appointments found for this patient' });
+        }
+
+        res.status(200).json(appointments); // Send the response including the appointment ID
+    } catch (error) {
+        console.error('Error fetching confirmed appointments for patient:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 const addAppointmentNotes = async (req, res) => {
-    const { appointmentId } = req.params; // Appointment ID from the route parameter
+    const appointmentId = req.params.appointmentId.trim();  // Appointment ID from the route parameter
     const { notes } = req.body; // Notes from the request body
 
+    console.log('Received request to add appointment notes:', { appointmentId, notes });
+
     try {
-        const appointment = await Appointment.findById(appointmentId).populate('patient', 'name email'); 
+        console.log('Searching for appointment with ID:', appointmentId);
+        const appointment = await Appointment.findById(appointmentId);
 
         if (!appointment) {
+            console.log('Appointment not found:', appointmentId);
             return res.status(404).json({ message: 'Appointment not found' });
         }
 
-        // Verify if the logged-in user is a staff member
-        if (!req.user.isStaff) {
-            return res.status(403).json({ message: 'You do not have permission to add notes to this appointment' });
-        }
-
+ 
         // Add or update the notes for the appointment
-        appointment.notes = notes;
+        console.log('Adding notes to appointment:', notes);
+        appointment.notes = notes  || appointment.notes;
 
-        await appointment.save();
+        const updatedAppointmentNotes = await appointment.save();
+       
+        console.log('Notes added successfully for appointment:', appointmentId);
 
         res.status(200).json({
             message: 'Appointment notes added successfully',
-            appointment,
+            appointment: updatedAppointmentNotes,
         });
     } catch (error) {
         console.error('Error adding appointment notes:', error);
@@ -408,6 +428,7 @@ module.exports = {
     getConfirmedAppointmentsForPatient, 
     getAllAppointments,
     getAllAppointmentsForPatient,
+    getConfirmedAppointments,
     addAppointmentNotes,
     getAppointmentNotes,
 };
