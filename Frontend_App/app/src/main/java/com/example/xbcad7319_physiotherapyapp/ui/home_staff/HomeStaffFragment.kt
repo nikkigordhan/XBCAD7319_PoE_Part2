@@ -1,7 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.home_staff
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +10,10 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+
+import androidx.fragment.app.Fragment
+
+
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
@@ -51,7 +54,11 @@ class HomeStaffFragment : Fragment() {
         val ibtnViewPatientProfile: ImageButton = view.findViewById(R.id.ibtnPatient_Profile)
         val ibtnBilling: ImageButton = view.findViewById(R.id.ibtnBilling)
         val ibtnApp: ImageButton = view.findViewById(R.id.ibtnAppointments)
+
+        val btnLogout: Button = view.findViewById(R.id.btnLogout) // Add logout button reference
+
         val btnLogout: Button = view.findViewById(R.id.btnLogout)
+
 
         ibtnNotifications.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_staff_to_nav_notifications_staff)
@@ -71,6 +78,12 @@ class HomeStaffFragment : Fragment() {
         btnLogout.setOnClickListener{
             logoutUser()
             Toast.makeText(context, "Logout successful", Toast.LENGTH_SHORT).show()
+        }
+
+        // Set OnClickListener for logout button
+        btnLogout.setOnClickListener {
+            logoutUser()
+            Toast.makeText(requireContext(), "Logout successful", Toast.LENGTH_SHORT).show()
         }
 
         return view
@@ -171,5 +184,44 @@ class HomeStaffFragment : Fragment() {
             apply()
         }
     }
-}
 
+    private fun logoutUser() {
+        Log.d(TAG, "Logging out user")
+        // Get the token from SharedPreferences
+        val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val tokenResponse = sharedPref.getString("bearerToken", null)
+
+        tokenResponse?.let {
+            try {
+                val jsonObject = JSONObject(it)
+                val token = jsonObject.getString("token") // Extract the token
+
+                apiService.logoutUser("Bearer $token").enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "Logout successful")
+                            // Clear SharedPreferences
+                            with(sharedPref.edit()) {
+                                remove("bearerToken")
+                                apply()
+                            }
+                            // Navigate to main menu after successful logout
+                            findNavController().navigate(R.id.action_nav_home_staff_to_nav_main_menu)
+                        } else {
+                            Log.e(TAG, "Logout failed: ${response.message()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e(TAG, "Error logging out", t)
+                    }
+                })
+            } catch (e: JSONException) {
+                Log.e(TAG, "Error parsing token: ${e.message}")
+            }
+        } ?: run {
+            Log.d(TAG, "Token is null, user not logged in.")
+            findNavController().navigate(R.id.action_nav_home_staff_to_nav_main_menu)
+        }
+    }
+}

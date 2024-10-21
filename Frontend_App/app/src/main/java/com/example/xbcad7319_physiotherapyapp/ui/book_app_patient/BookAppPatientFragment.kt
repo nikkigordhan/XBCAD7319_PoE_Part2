@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.book_app_patient
 
+import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
@@ -16,7 +17,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
-import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.BookAppointmentRequest
 import okhttp3.ResponseBody
@@ -24,10 +24,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.util.Log
-import com.example.xbcad7319_physiotherapyapp.ui.login_patient.LoginPatientFragment
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
 
 class BookAppPatientFragment : Fragment() {
 
