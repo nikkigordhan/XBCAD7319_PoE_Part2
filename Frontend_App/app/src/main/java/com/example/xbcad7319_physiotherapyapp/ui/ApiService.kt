@@ -20,6 +20,9 @@ interface ApiService {
     @POST("api/auth/login")
     fun loginPatient(@Body loginRequest: LoginRequest): Call<ResponseBody>
 
+    @POST("api/auth/logout")
+    fun logoutUser(@Header("Authorization") token: String): Call<Void>
+
     @POST("api/auth/login")
     fun loginStaff(@Body loginRequest: LoginRequest): Call<ResponseBody>
 

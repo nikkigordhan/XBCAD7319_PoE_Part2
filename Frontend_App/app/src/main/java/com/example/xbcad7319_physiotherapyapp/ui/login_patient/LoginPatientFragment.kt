@@ -18,6 +18,7 @@ import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.LoginRequest
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +28,7 @@ class LoginPatientFragment : Fragment() {
     private var _binding: FragmentLoginPatientBinding? = null
     private val binding get() = _binding!!
     private var passwordVisible: Boolean = false  // For password visibility toggle
-    public lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginPatientFragment"
 
     // Create an instance of ApiService
@@ -90,8 +91,17 @@ class LoginPatientFragment : Fragment() {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    // Handle successful login
-                    val token = response.body()?.string()  // Assuming token is in the response body
+                    val responseBody = response.body()?.string()
+                    val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
+
+                    val token = jsonResponse.getString("token") // Extracting token
+                    val role = jsonResponse.getString("role") // Extracting user type
+
+                    // Check if the user type is "patient"
+                    if (role != "patient") {
+                        Toast.makeText(context, "Login failed: You are not authorized to access this app.", Toast.LENGTH_SHORT).show()
+                        return
+                    }
 
                     // Store token and username in SharedPreferences
                     sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
@@ -100,7 +110,7 @@ class LoginPatientFragment : Fragment() {
                         putString("loggedInUsername", username)
                         apply()
                     }
-                    Log.e(TAG, "Login successfull: Token=${token}")
+                    Log.e(TAG, "Login successful: Token=$token")
 
                     Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
                     clearFields()

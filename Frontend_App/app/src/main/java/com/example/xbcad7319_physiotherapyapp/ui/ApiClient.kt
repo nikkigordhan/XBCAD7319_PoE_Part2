@@ -21,10 +21,6 @@ object ApiClient {
 
     private const val BASE_URL = "http://192.168.0.5:5000"
 
-
-    private const val BASE_URL = "http://192.168.10.121:5000"
-
-
     private var retrofit: Retrofit? = null
 
     fun getRetrofitInstance(context: Context): Retrofit {
