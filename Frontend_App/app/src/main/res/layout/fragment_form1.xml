@@ -588,7 +588,7 @@
                 android:textSize="15sp" />
 
 
-            <com.example.PhysioTherapyApp.ui.SignatureView
+            <com.example.xbcad7319_physiotherapyapp.ui.SignatureView
                 android:id="@+id/signatureView2"
                 android:layout_width="match_parent"
                 android:background="@color/grey"

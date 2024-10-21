@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "PhysioTherapyApp"
+    namespace = "com.example.xbcad7319_physiotherapyapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "PhysioTherapyApp"
+        applicationId = "com.example.xbcad7319_physiotherapyapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -57,6 +57,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // api
+//    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+//    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+//    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
