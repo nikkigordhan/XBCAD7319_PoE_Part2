@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.form2
 
+import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
@@ -17,7 +18,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
-import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
+
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.Form2Request
 import com.example.xbcad7319_physiotherapyapp.ui.SignatureView
@@ -35,8 +36,8 @@ class Form2Fragment : Fragment() {
     private lateinit var signatureView: SignatureView
     private lateinit var calendarView: CalendarView
     private lateinit var btnClearSignature: Button
+    private lateinit var btnCancel: Button // Add a reference for the Cancel button
     private lateinit var selectedDate: Date  // Keep `selectedDate` as Date type
-    private lateinit var btnCancel: Button
 
     private lateinit var apiService: ApiService
 
@@ -52,7 +53,7 @@ class Form2Fragment : Fragment() {
         signatureView = view.findViewById(R.id.signature_view)
         calendarView = view.findViewById(R.id.calendarView2)
         btnClearSignature = view.findViewById(R.id.btnClearSignature)
-        btnCancel = view.findViewById(R.id.btnCancel)
+        btnCancel = view.findViewById(R.id.btnCancel) // Initialize the Cancel button
 
         // Initialize apiService
         apiService = ApiClient.getRetrofitInstance(requireContext()).create(ApiService::class.java)
@@ -72,7 +73,7 @@ class Form2Fragment : Fragment() {
             findNavController().navigate(R.id.action_nav_form2_to_nav_intake_forms)
         }
 
-        /// Clear signature button functionality
+        // Clear signature button functionality
         btnClearSignature.setOnClickListener {
             Log.d("Form2Fragment", "Clear signature button clicked")
             signatureView.clearSignature() // Clear the signature view
@@ -111,6 +112,16 @@ class Form2Fragment : Fragment() {
         }
 
         return view
+    }
+
+    // Clear all fields and signature
+    private fun clearAllFields() {
+        Log.d("Form2Fragment", "Clearing all fields")
+        nameEditText.text.clear() // Clear the name field
+        areaConsentedEditText.text.clear() // Clear the area consented field
+        signatureView.clearSignature() // Clear the signature view
+        calendarView.setDate(System.currentTimeMillis(), false, true) // Reset the calendar to today's date
+        Toast.makeText(context, "All fields cleared", Toast.LENGTH_SHORT).show() // Optional feedback
     }
 
     // Capture signature as Base64 string
@@ -179,15 +190,5 @@ class Form2Fragment : Fragment() {
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    // Clear all fields and signature
-    private fun clearAllFields() {
-        Log.d("Form2Fragment", "Clearing all fields")
-        nameEditText.text.clear() // Clear the name field
-        areaConsentedEditText.text.clear() // Clear the area consented field
-        signatureView.clearSignature() // Clear the signature view
-        calendarView.setDate(System.currentTimeMillis(), false, true) // Reset the calendar to today's date
-        Toast.makeText(context, "All fields cleared", Toast.LENGTH_SHORT).show() // Optional feedback
     }
 }

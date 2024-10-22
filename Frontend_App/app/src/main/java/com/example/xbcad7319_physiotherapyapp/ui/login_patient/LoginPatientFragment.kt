@@ -18,6 +18,7 @@ import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.LoginRequest
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,8 +27,12 @@ class LoginPatientFragment : Fragment() {
 
     private var _binding: FragmentLoginPatientBinding? = null
     private val binding get() = _binding!!
+
+    private var passwordVisible: Boolean = false
+
     private var passwordVisible: Boolean = false  // For password visibility toggle
-    public lateinit var sharedPref: SharedPreferences
+
+    private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginPatientFragment"
 
     // Create an instance of ApiService
@@ -68,18 +73,15 @@ class LoginPatientFragment : Fragment() {
 
         // Validate inputs
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            Toast.makeText(context, "Please enter both username and password", Toast.LENGTH_SHORT).show()
+            showToast("Please enter both username and password")
             return
         }
 
-        // Create a new LoginRequest object for login
-        val loginRequest = LoginRequest(
-            username = username,
-            password = password
-        )
+        // Create a new LoginRequest object
+        val loginRequest = LoginRequest(username = username, password = password)
 
         // Call API to log in
-        loginUserToApi(loginRequest, username)  // Passing username for storing in SharedPreferences
+        loginUserToApi(loginRequest, username)
     }
 
     private fun loginUserToApi(loginRequest: LoginRequest, username: String) {
@@ -90,8 +92,20 @@ class LoginPatientFragment : Fragment() {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    // Handle successful login
-                    val token = response.body()?.string()  // Assuming token is in the response body
+                    val responseBody = response.body()?.string()
+
+                    handleLoginResponse(responseBody, username)
+
+                    val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
+
+                    val token = jsonResponse.getString("token") // Extracting token
+                    val role = jsonResponse.getString("role") // Extracting user type
+
+                    // Check if the user type is "patient"
+                    if (role != "patient") {
+                        Toast.makeText(context, "Login failed: You are not authorized to access this app.", Toast.LENGTH_SHORT).show()
+                        return
+                    }
 
                     // Store token and username in SharedPreferences
                     sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
@@ -100,25 +114,56 @@ class LoginPatientFragment : Fragment() {
                         putString("loggedInUsername", username)
                         apply()
                     }
-                    Log.e(TAG, "Login successfull: Token=${token}")
+                    Log.e(TAG, "Login successful: Token=$token")
 
                     Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
                     clearFields()
 
                     // Navigate to the Home screen
                     findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
+
                 } else {
-                    val errorResponse = response.errorBody()?.string() ?: "Unknown error"
-                    Log.e(TAG, "Login failed: HTTP ${response.code()} - $errorResponse")
-                    Toast.makeText(context, "Login failed: $errorResponse", Toast.LENGTH_SHORT).show()
+                    handleErrorResponse(response)
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e(TAG, "Error: ${t.message}", t)
-                Toast.makeText(context, "An error occurred: ${t.message}", Toast.LENGTH_SHORT).show()
+                showToast("An error occurred: ${t.message}")
             }
         })
+    }
+
+    private fun handleLoginResponse(responseBody: String?, username: String) {
+        val jsonResponse = JSONObject(responseBody)
+        val token = jsonResponse.getString("token")
+        val role = jsonResponse.getString("role")
+
+        // Check if the user type is "patient"
+        if (role != "patient") {
+            showToast("Login failed: You are not authorized to access this app.")
+            return
+        }
+
+        // Store token and username in SharedPreferences
+        sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("bearerToken", token)
+            putString("loggedInUsername", username)
+            apply()
+        }
+        Log.e(TAG, "Login successful: Token=$token")
+        showToast("Login successful!")
+        clearFields()
+
+        // Navigate to the Home screen
+        findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
+    }
+
+    private fun handleErrorResponse(response: Response<ResponseBody>) {
+        val errorResponse = response.errorBody()?.string() ?: "Unknown error"
+        Log.e(TAG, "Login failed: HTTP ${response.code()} - $errorResponse")
+        showToast("Login failed: $errorResponse")
     }
 
     private fun onForgotPasswordClicked() {
@@ -127,13 +172,12 @@ class LoginPatientFragment : Fragment() {
 
     private fun togglePasswordVisibility() {
         passwordVisible = !passwordVisible
-
         if (passwordVisible) {
             binding.etxtPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper visible icon
         } else {
             binding.etxtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Use proper hidden icon
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper hidden icon
         }
         binding.etxtPassword.setSelection(binding.etxtPassword.text.length)
     }
@@ -141,6 +185,10 @@ class LoginPatientFragment : Fragment() {
     private fun clearFields() {
         binding.etxtUsername.text.clear()
         binding.etxtPassword.text.clear()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
