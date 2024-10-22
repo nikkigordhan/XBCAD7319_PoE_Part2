@@ -106,6 +106,11 @@ interface ApiService {
         @Body requestBody: Map<String, String> // Or use a data class
     ): Call<ResponseBody>
 
+    @GET("api/medicalHistory")
+    fun getMedicalHistory(@Header("Authorization") token: String): Call<MedicalHistory>
+
+    @POST("api/medicalHistory")
+    fun saveMedicalHistory(@Header("Authorization") token: String, @Body medicalHistory: MedicalHistory): Call<Void>
 }
 
 
@@ -226,5 +231,14 @@ data class Form1Request(
     val signature: String?, // Assuming signature is a String, change if it's different
     val placeS: String,
     val date: Date // The formatted date from the CalendarView
+)
+
+// Data class for Medical History
+data class MedicalHistory(
+    val allergies: String,
+    val injuries: String,
+    val procedures: String,
+    val medications: String,
+    val familyHistory: String
 )
 
