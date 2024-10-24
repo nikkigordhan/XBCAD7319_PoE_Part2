@@ -104,11 +104,16 @@
         <action
             android:id="@+id/action_nav_medical_tests_to_nav_home_patient"
             app:destination="@id/nav_home_patient" />
+        <action
+            android:id="@+id/action_nav_medical_tests_to_nav_login_patient"
+            app:destination="@id/nav_login_patient"
+            app:popUpTo="@id/nav_home_patient"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_app"
-        android:name="com.example.xbcad7319_physiotherapyapp.ui.app_patient.AppointmentPatientFragment"
+        android:name="com.example.xbcad7319_physiotherapyapp.ui.app_patient.app_patient.AppointmentPatientFragment"
         android:label="Appointments "
         tools:layout="@layout/fragment_appointment_client" >
         <action
@@ -313,8 +318,5 @@
             app:destination="@id/nav_intake_forms" />
 
     </fragment>
-
-
-
 
 </navigation>

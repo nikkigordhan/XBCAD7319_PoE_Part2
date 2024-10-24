@@ -29,10 +29,6 @@ interface ApiService {
     @POST("api/auth/forget-password")
     fun updatePassword(@Body request: PasswordUpdateRequest): Call<ResponseBody>
 
-
-    @POST("api/auth/logout")
-    fun logoutUser(@Header("Authorization") token: String): Call<Void>
-
     @POST("api/form2/createForm2")
     fun submitForm2Data(
         @Body form2Request: Form2Request
@@ -124,6 +120,21 @@ interface ApiService {
         userId: String,
         @Body profileUpdate: Map<String, String>
     ): Call<Map<String, Any>>
+
+    @GET("api/medical-tests")
+    fun getMedicalTests(@Header("Authorization") token: String): Call<List<MedicalTest>>
+
+    @POST("api/medical-tests")
+    fun addMedicalTest(
+        @Header("Authorization") token: String,
+        @Body medicalTest: MedicalTest
+    ): Call<ResponseBody>
+
+    @DELETE("api/medical-tests/{testId}")
+    fun deleteMedicalTest(
+        @Header("Authorization") token: String,
+        @Path("testId") testId: String
+    ): Call<ResponseBody>
 }
 
 
@@ -255,3 +266,12 @@ data class MedicalHistory(
     val familyHistory: String
 )
 
+data class MedicalTest(
+    val id: String,
+    val patientId: String,
+    val testName: String,
+    val testDate: String,
+    val testResults: String,
+    val imageUrl: String?,
+    val notes: String?
+)
