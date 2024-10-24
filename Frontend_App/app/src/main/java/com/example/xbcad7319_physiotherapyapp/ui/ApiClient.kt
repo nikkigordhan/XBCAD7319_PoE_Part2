@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    private const val BASE_URL = "http://10.0.0.21:5000"
+    private const val BASE_URL = "http://10.0.0.38:5000"
 
     private var retrofit: Retrofit? = null
 
@@ -22,7 +22,9 @@ object ApiClient {
         return retrofit!!
     }
 
-
+    fun getService(context: Context): ApiService {
+        return getRetrofitInstance(context).create(ApiService::class.java)
+    }
 }
 
 

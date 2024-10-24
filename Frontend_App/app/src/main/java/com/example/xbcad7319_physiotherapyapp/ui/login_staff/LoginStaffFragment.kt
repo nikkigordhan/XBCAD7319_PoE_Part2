@@ -22,14 +22,11 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import org.json.JSONObject
 
 class LoginStaffFragment : Fragment() {
 
     private var _binding: FragmentLoginStaffBinding? = null
     private val binding get() = _binding!!
-
-    private var passwordVisible: Boolean = false
 
     private var passwordVisible: Boolean = false  // For password visibility toggle
 
@@ -77,9 +74,6 @@ class LoginStaffFragment : Fragment() {
             showToast("Please enter both username and password")
             return
         }
-
-        // Create a new LoginRequest object
-        val loginRequest = LoginRequest(username = username, password = password)
 
         // Create a new LoginRequest object for login
         val loginRequest = LoginRequest(

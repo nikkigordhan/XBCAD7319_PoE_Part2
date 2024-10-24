@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginPatientBinding
@@ -30,7 +31,6 @@ class LoginPatientFragment : Fragment() {
 
     private var passwordVisible: Boolean = false
 
-    private var passwordVisible: Boolean = false  // For password visibility toggle
 
     private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginPatientFragment"
@@ -120,7 +120,13 @@ class LoginPatientFragment : Fragment() {
                     clearFields()
 
                     // Navigate to the Home screen
-                    findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
+                    findNavController().navigate(
+                        R.id.nav_home_patient,
+                        null,
+                        NavOptions.Builder()
+                            .setPopUpTo(R.id.nav_login_patient, true)  // This clears the back stack up to login
+                            .build()
+                    )
 
                 } else {
                     handleErrorResponse(response)
@@ -138,6 +144,7 @@ class LoginPatientFragment : Fragment() {
         val jsonResponse = JSONObject(responseBody)
         val token = jsonResponse.getString("token")
         val role = jsonResponse.getString("role")
+        val userId = jsonResponse.getString("userId")
 
         // Check if the user type is "patient"
         if (role != "patient") {
@@ -150,9 +157,10 @@ class LoginPatientFragment : Fragment() {
         with(sharedPref.edit()) {
             putString("bearerToken", token)
             putString("loggedInUsername", username)
+            putString("userId", userId)
             apply()
         }
-        Log.e(TAG, "Login successful: Token=$token")
+        Log.e(TAG, "Login successful: Token=$token, UserId=$userId")
         showToast("Login successful!")
         clearFields()
 
