@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.form1
 
+import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
@@ -19,7 +20,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
-import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.Form1Request
 import com.example.xbcad7319_physiotherapyapp.ui.SignatureView
@@ -28,7 +28,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
 
 class Form1Fragment : Fragment() {

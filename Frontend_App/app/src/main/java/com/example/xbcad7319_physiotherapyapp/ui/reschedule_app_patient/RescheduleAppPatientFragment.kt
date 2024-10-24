@@ -23,16 +23,12 @@ import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.AppointmentDetails
 import com.example.xbcad7319_physiotherapyapp.ui.RescheduleAppointmentRequest
 import com.example.xbcad7319_physiotherapyapp.ui.RescheduleAppointmentResponse
-import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 class RescheduleAppPatientFragment : Fragment() {
 

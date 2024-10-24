@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.appointment_notes
 
+import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +13,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.*
-import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.AppointmentDetails
 import okhttp3.ResponseBody

@@ -1,8 +1,7 @@
-package com.example.xbcad7319_physiotherapyapp
+package com.example.xbcad7319_physiotherapyapp.ui
 
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

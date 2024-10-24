@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.appointment_notes.AppointmentNotesFragment">
+    tools:context="com.example.xbcad7319_physiotherapyapp.ui.appointment_notes.AppointmentNotesFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

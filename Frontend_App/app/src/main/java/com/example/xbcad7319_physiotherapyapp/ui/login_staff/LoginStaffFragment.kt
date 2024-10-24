@@ -22,12 +22,17 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import org.json.JSONObject
 
 class LoginStaffFragment : Fragment() {
 
     private var _binding: FragmentLoginStaffBinding? = null
     private val binding get() = _binding!!
+
+    private var passwordVisible: Boolean = false
+
     private var passwordVisible: Boolean = false  // For password visibility toggle
+
     private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginStaffFragment"
 
@@ -69,9 +74,12 @@ class LoginStaffFragment : Fragment() {
 
         // Validate inputs
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            Toast.makeText(context, "Please enter both username and password", Toast.LENGTH_SHORT).show()
+            showToast("Please enter both username and password")
             return
         }
+
+        // Create a new LoginRequest object
+        val loginRequest = LoginRequest(username = username, password = password)
 
         // Create a new LoginRequest object for login
         val loginRequest = LoginRequest(
@@ -79,8 +87,9 @@ class LoginStaffFragment : Fragment() {
             password = password
         )
 
+
         // Call API to log in
-        loginUserToApi(loginRequest, username)  // Passing username for storing in SharedPreferences
+        loginUserToApi(loginRequest, username)
     }
 
     private fun loginUserToApi(loginRequest: LoginRequest, username: String) {
@@ -92,6 +101,9 @@ class LoginStaffFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()?.string()
+
+                    handleLoginResponse(responseBody, username)
+
                     val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
 
                     val token = jsonResponse.getString("token") // Extracting token
@@ -117,18 +129,49 @@ class LoginStaffFragment : Fragment() {
 
                     // Navigate to the Home screen
                     findNavController().navigate(R.id.action_nav_login_staff_to_nav_home_staff)
+
                 } else {
-                    val errorResponse = response.errorBody()?.string() ?: "Unknown error"
-                    Log.e(TAG, "Login failed: HTTP ${response.code()} - $errorResponse")
-                    Toast.makeText(context, "Login failed: $errorResponse", Toast.LENGTH_SHORT).show()
+                    handleErrorResponse(response)
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e(TAG, "Error: ${t.message}", t)
-                Toast.makeText(context, "An error occurred: ${t.message}", Toast.LENGTH_SHORT).show()
+                showToast("An error occurred: ${t.message}")
             }
         })
+    }
+
+    private fun handleLoginResponse(responseBody: String?, username: String) {
+        val jsonResponse = JSONObject(responseBody)
+        val token = jsonResponse.getString("token")
+        val role = jsonResponse.getString("role")
+
+        // Check if the user type is "staff"
+        if (role != "staff") {
+            showToast("Login failed: You are not authorized to access this app.")
+            return
+        }
+
+        // Store token and username in SharedPreferences
+        sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("bearerToken", token)
+            putString("loggedInUsername", username)
+            apply()
+        }
+        Log.e(TAG, "Login successful: Token=$token")
+        showToast("Login successful!")
+        clearFields()
+
+        // Navigate to the Home screen
+        findNavController().navigate(R.id.action_nav_login_staff_to_nav_home_staff)
+    }
+
+    private fun handleErrorResponse(response: Response<ResponseBody>) {
+        val errorResponse = response.errorBody()?.string() ?: "Unknown error"
+        Log.e(TAG, "Login failed: HTTP ${response.code()} - $errorResponse")
+        showToast("Login failed: $errorResponse")
     }
 
     private fun onForgotPasswordClicked() {
@@ -137,13 +180,16 @@ class LoginStaffFragment : Fragment() {
 
     private fun togglePasswordVisibility() {
         passwordVisible = !passwordVisible
-
         if (passwordVisible) {
             binding.etxtPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper visible icon
         } else {
             binding.etxtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper hidden icon
+
             binding.iconViewPassword.setImageResource(R.drawable.visible_icon)  // Use proper hidden icon
+
         }
         binding.etxtPassword.setSelection(binding.etxtPassword.text.length)
     }
@@ -151,6 +197,10 @@ class LoginStaffFragment : Fragment() {
     private fun clearFields() {
         binding.etxtUsername.text.clear()
         binding.etxtPassword.text.clear()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
