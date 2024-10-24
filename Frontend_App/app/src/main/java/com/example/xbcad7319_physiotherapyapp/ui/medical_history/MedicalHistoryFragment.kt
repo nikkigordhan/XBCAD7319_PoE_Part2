@@ -1,5 +1,6 @@
 package com.example.xbcad7319_physiotherapyapp.ui.medical_history
 
+
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -114,6 +115,7 @@ class MedicalHistoryFragment : Fragment() {
     private fun loadMedicalHistory() {
         // Retrieve the token from SharedPreferences
         val token = "Bearer ${sharedPref.getString("bearerToken", "")}"
+
 
         val call = apiService.getMedicalHistory(token)
         call.enqueue(object : Callback<MedicalHistory> {
