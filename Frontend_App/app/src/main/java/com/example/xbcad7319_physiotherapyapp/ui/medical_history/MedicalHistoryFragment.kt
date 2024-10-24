@@ -116,6 +116,7 @@ class MedicalHistoryFragment : Fragment() {
         // Retrieve the token from SharedPreferences
         val token = "Bearer ${sharedPref.getString("bearerToken", "")}"
 
+
         val call = apiService.getMedicalHistory(token)
         call.enqueue(object : Callback<MedicalHistory> {
             override fun onResponse(call: Call<MedicalHistory>, response: Response<MedicalHistory>) {

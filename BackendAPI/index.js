@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const medicalHistoryRoutes = require('./routes/medicalHistoryRoutes');
 const form2Routes = require('./routes/formRoutes'); // Import the formRoutes
+const patientProfileRoutes = require('./routes/patientProfileRoutes');
 
 
 // Load environment variables
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/medicalHistory', medicalHistoryRoutes);
 app.use('/api/form2', form2Routes); // Ensure this is set correctly
+app.use('/api/patient/profile', patientProfileRoutes);
 
 // Basic error handling middleware
 app.use((err, req, res, next) => {
