@@ -30,6 +30,9 @@ interface ApiService {
     fun updatePassword(@Body request: PasswordUpdateRequest): Call<ResponseBody>
 
 
+    @POST("api/auth/logout")
+    fun logoutUser(@Header("Authorization") token: String): Call<Void>
+
     @POST("api/form2/createForm2")
     fun submitForm2Data(
         @Body form2Request: Form2Request

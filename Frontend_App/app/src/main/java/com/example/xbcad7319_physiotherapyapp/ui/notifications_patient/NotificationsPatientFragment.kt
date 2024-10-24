@@ -18,8 +18,6 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
-import com.example.xbcad7319_physiotherapyapp.ui.Notification
-import com.example.xbcad7319_physiotherapyapp.ui.NotificationAdapter
 import com.example.xbcad7319_physiotherapyapp.ui.NotificationsResponse
 import org.json.JSONException
 import org.json.JSONObject

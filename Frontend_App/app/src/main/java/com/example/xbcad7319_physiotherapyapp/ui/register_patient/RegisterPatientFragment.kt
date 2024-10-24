@@ -3,7 +3,6 @@ package com.example.xbcad7319_physiotherapyapp.ui.register_patient
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
