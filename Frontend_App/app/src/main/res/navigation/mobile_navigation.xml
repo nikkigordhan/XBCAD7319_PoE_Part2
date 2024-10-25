@@ -32,6 +32,7 @@
         <action
             android:id="@+id/action_nav_login_patient_to_nav_home_patient"
             app:destination="@id/nav_home_patient" />
+
     </fragment>
 
 
@@ -61,6 +62,9 @@
         <action
             android:id="@+id/action_nav_home_patient_to_nav_main_menu"
             app:destination="@id/nav_main_menu" />
+        <action
+            android:id="@+id/action_nav_home_patient_to_nav_login_patient"
+            app:destination="@id/nav_login_patient" />
 
     </fragment>
 
@@ -184,6 +188,9 @@
         <action
             android:id="@+id/action_nav_home_staff_to_nav_main_menu"
             app:destination="@id/nav_main_menu" />
+        <action
+            android:id="@+id/action_nav_home_staff_to_nav_login_staff"
+            app:destination="@id/nav_login_staff" />
 
     </fragment>
 
@@ -245,6 +252,7 @@
         <action
             android:id="@+id/action_nav_login_staff_to_nav_home_staff"
             app:destination="@id/nav_home_staff" />
+
     </fragment>
 
 
