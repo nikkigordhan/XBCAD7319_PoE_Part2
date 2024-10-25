@@ -1,19 +1,19 @@
 package com.example.xbcad7319_physiotherapyapp.ui.login_patient
-
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginPatientBinding
+import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginStaffBinding
 import com.example.xbcad7319_physiotherapyapp.ui.ApiClient
 import com.example.xbcad7319_physiotherapyapp.ui.ApiService
 import com.example.xbcad7319_physiotherapyapp.ui.LoginRequest
@@ -25,17 +25,18 @@ import retrofit2.Response
 
 class LoginPatientFragment : Fragment() {
 
-    private var _binding: FragmentLoginPatientBinding? = null
+    private var _binding: FragmentLoginStaffBinding? = null
     private val binding get() = _binding!!
 
-    private var passwordVisible: Boolean = false
 
     private var passwordVisible: Boolean = false  // For password visibility toggle
 
-    private lateinit var sharedPref: SharedPreferences
-    private val TAG = "LoginPatientFragment"
 
-    // Create an instance of ApiService
+
+    private lateinit var sharedPref: SharedPreferences
+    private val TAG = "LoginStaffFragment"
+
+    // Lazy initialization of ApiService
     private val apiService: ApiService by lazy {
         ApiClient.getRetrofitInstance(requireContext()).create(ApiService::class.java)
     }
@@ -44,54 +45,41 @@ class LoginPatientFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginPatientBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginStaffBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Handle password visibility toggle
-        binding.iconViewPassword.setOnClickListener {
-            togglePasswordVisibility()
-        }
-
-        // Handle login button click
-        binding.btnLogin.setOnClickListener {
-            loginUser()
-        }
-
-        // Handle forgot password button click
-        binding.txtForgotPassword.setOnClickListener {
-            onForgotPasswordClicked()
-        }
+        binding.iconViewPassword.setOnClickListener { togglePasswordVisibility() }
+        binding.btnLogin.setOnClickListener { loginUser() }
+        binding.txtForgotPassword.setOnClickListener { onForgotPasswordClicked() }
     }
 
     private fun loginUser() {
         val username = binding.etxtUsername.text.toString().trim()
         val password = binding.etxtPassword.text.toString().trim()
 
-        // Validate inputs
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+        if (username.isEmpty() || password.isEmpty()) {
             showToast("Please enter both username and password")
             return
         }
 
-        // Create a new LoginRequest object
-        val loginRequest = LoginRequest(username = username, password = password)
-
-        // Call API to log in
+        val loginRequest = LoginRequest(username, password)
         loginUserToApi(loginRequest, username)
     }
 
     private fun loginUserToApi(loginRequest: LoginRequest, username: String) {
-        val call = apiService.loginPatient(loginRequest)
+        val call = apiService.loginStaff(loginRequest)
 
         Log.d(TAG, "Sending login request: $loginRequest")
-
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
+
+                    response.body()?.string()?.let { handleLoginResponse(it, username) }
+
                     val responseBody = response.body()?.string()
 
                     handleLoginResponse(responseBody, username)
@@ -120,7 +108,14 @@ class LoginPatientFragment : Fragment() {
                     clearFields()
 
                     // Navigate to the Home screen
-                    findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
+                    findNavController().navigate(
+                        R.id.nav_home_patient,
+                        null,
+                        NavOptions.Builder()
+                            .setPopUpTo(R.id.nav_login_patient, true)  // This clears the back stack up to login
+                            .build()
+                    )
+
 
                 } else {
                     handleErrorResponse(response)
@@ -134,29 +129,33 @@ class LoginPatientFragment : Fragment() {
         })
     }
 
-    private fun handleLoginResponse(responseBody: String?, username: String) {
+    private fun handleLoginResponse(responseBody: String, username: String) {
         val jsonResponse = JSONObject(responseBody)
         val token = jsonResponse.getString("token")
         val role = jsonResponse.getString("role")
+        val userId = jsonResponse.getString("userId")
 
-        // Check if the user type is "patient"
         if (role != "patient") {
             showToast("Login failed: You are not authorized to access this app.")
             return
         }
 
-        // Store token and username in SharedPreferences
         sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             putString("bearerToken", token)
             putString("loggedInUsername", username)
+            putString("userId", userId)
             apply()
         }
-        Log.e(TAG, "Login successful: Token=$token")
+
+
+        Log.d(TAG, "Login successful: Token=$token")
+
+        Log.e(TAG, "Login successful: Token=$token, UserId=$userId")
+
         showToast("Login successful!")
         clearFields()
 
-        // Navigate to the Home screen
         findNavController().navigate(R.id.action_nav_login_patient_to_nav_home_patient)
     }
 
@@ -172,13 +171,14 @@ class LoginPatientFragment : Fragment() {
 
     private fun togglePasswordVisibility() {
         passwordVisible = !passwordVisible
-        if (passwordVisible) {
-            binding.etxtPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper visible icon
+        binding.etxtPassword.inputType = if (passwordVisible) {
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         } else {
-            binding.etxtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            binding.iconViewPassword.setImageResource(R.drawable.visible_icon) // Use proper hidden icon
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
+        binding.iconViewPassword.setImageResource(
+            if (passwordVisible) R.drawable.visible_icon else R.drawable.visible_icon
+        )
         binding.etxtPassword.setSelection(binding.etxtPassword.text.length)
     }
 

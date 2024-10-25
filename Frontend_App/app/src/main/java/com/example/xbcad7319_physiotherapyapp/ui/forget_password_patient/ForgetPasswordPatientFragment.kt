@@ -80,6 +80,8 @@ class ForgetPasswordPatientFragment : Fragment() {
         // Call API to update password
         updatePasswordInApi(passwordUpdateRequest)
     }
+    // the code above was taken and adapted from Firebase.
+    // https://firebase.google.com/docs/auth/android/manage-users
 
     private fun updatePasswordInApi(passwordUpdateRequest: PasswordUpdateRequest) {
         val call = apiService.updatePassword(passwordUpdateRequest)
@@ -107,6 +109,8 @@ class ForgetPasswordPatientFragment : Fragment() {
             }
         })
     }
+    // the code above was taken and adapted from Firebase.
+    // https://firebase.google.com/docs/auth/android/manage-users
 
     private fun clearFields() {
         binding.etxtUsername.text.clear()
@@ -131,4 +135,6 @@ class ForgetPasswordPatientFragment : Fragment() {
         }
         binding.etxtNewPassword.setSelection(binding.etxtNewPassword.text.length)
     }
+    // the code above was taken and adapted from Android Developers
+    // https://developer.android.com/quick-guides/content/show-hide-password
 }

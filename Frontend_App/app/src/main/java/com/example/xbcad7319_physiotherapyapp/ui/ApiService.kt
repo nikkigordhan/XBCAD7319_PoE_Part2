@@ -30,9 +30,6 @@ interface ApiService {
     fun updatePassword(@Body request: PasswordUpdateRequest): Call<ResponseBody>
 
 
-    @POST("api/auth/logout")
-    fun logoutUser(@Header("Authorization") token: String): Call<Void>
-
     @POST("api/form2/createForm2")
     fun submitForm2Data(
         @Body form2Request: Form2Request
@@ -109,6 +106,36 @@ interface ApiService {
         @Body requestBody: Map<String, String> // Or use a data class
     ): Call<ResponseBody>
 
+    @GET("api/medicalHistory")
+    fun getMedicalHistory(@Header("Authorization") token: String): Call<MedicalHistory>
+
+    @POST("api/medicalHistory")
+    fun saveMedicalHistory(@Header("Authorization") token: String, @Body medicalHistory: MedicalHistory): Call<Void>
+
+    @GET("api/patient/profile")
+    fun getPatientProfile(@Header("Authorization") token: String): Call<Map<String, Any>>
+
+    @PUT("api/patient/profile")
+    fun updatePatientProfile(
+        @Header("Authorization") token: String,
+        userId: String,
+        @Body profileUpdate: Map<String, String>
+    ): Call<Map<String, Any>>
+
+    @GET("api/medical-tests")
+    fun getMedicalTests(@Header("Authorization") token: String): Call<List<MedicalTest>>
+
+    @POST("api/medical-tests")
+    fun addMedicalTest(
+        @Header("Authorization") token: String,
+        @Body medicalTest: MedicalTest
+    ): Call<ResponseBody>
+
+    @DELETE("api/medical-tests/{testId}")
+    fun deleteMedicalTest(
+        @Header("Authorization") token: String,
+        @Path("testId") testId: String
+    ): Call<ResponseBody>
 }
 
 
@@ -231,3 +258,21 @@ data class Form1Request(
     val date: Date // The formatted date from the CalendarView
 )
 
+// Data class for Medical History
+data class MedicalHistory(
+    val allergies: String,
+    val injuries: String,
+    val procedures: String,
+    val medications: String,
+    val familyHistory: String
+)
+
+data class MedicalTest(
+    val id: String,
+    val patientId: String,
+    val testName: String,
+    val testDate: String,
+    val testResults: String,
+    val imageUrl: String?,
+    val notes: String?
+)
