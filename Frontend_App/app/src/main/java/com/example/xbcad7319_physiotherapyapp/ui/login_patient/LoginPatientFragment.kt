@@ -82,7 +82,9 @@ class LoginPatientFragment : Fragment() {
 
                     val responseBody = response.body()?.string()
 
-                    handleLoginResponse(responseBody, username)
+                    if (responseBody != null) {
+                        handleLoginResponse(responseBody, username)
+                    }
 
                     val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
 
