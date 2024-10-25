@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.xbcad7319_physiotherapyapp.R
 import com.example.xbcad7319_physiotherapyapp.databinding.FragmentLoginPatientBinding
@@ -27,7 +28,11 @@ class LoginPatientFragment : Fragment() {
     private var _binding: FragmentLoginStaffBinding? = null
     private val binding get() = _binding!!
 
+
     private var passwordVisible: Boolean = false  // For password visibility toggle
+
+
+
     private lateinit var sharedPref: SharedPreferences
     private val TAG = "LoginStaffFragment"
 
@@ -72,7 +77,46 @@ class LoginPatientFragment : Fragment() {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
+
                     response.body()?.string()?.let { handleLoginResponse(it, username) }
+
+                    val responseBody = response.body()?.string()
+
+                    handleLoginResponse(responseBody, username)
+
+                    val jsonResponse = JSONObject(responseBody) // Assuming the response is in JSON format
+
+                    val token = jsonResponse.getString("token") // Extracting token
+                    val role = jsonResponse.getString("role") // Extracting user type
+
+                    // Check if the user type is "patient"
+                    if (role != "patient") {
+                        Toast.makeText(context, "Login failed: You are not authorized to access this app.", Toast.LENGTH_SHORT).show()
+                        return
+                    }
+
+                    // Store token and username in SharedPreferences
+                    sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        putString("bearerToken", token)
+                        putString("loggedInUsername", username)
+                        apply()
+                    }
+                    Log.e(TAG, "Login successful: Token=$token")
+
+                    Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                    clearFields()
+
+                    // Navigate to the Home screen
+                    findNavController().navigate(
+                        R.id.nav_home_patient,
+                        null,
+                        NavOptions.Builder()
+                            .setPopUpTo(R.id.nav_login_patient, true)  // This clears the back stack up to login
+                            .build()
+                    )
+
+
                 } else {
                     handleErrorResponse(response)
                 }
@@ -89,6 +133,7 @@ class LoginPatientFragment : Fragment() {
         val jsonResponse = JSONObject(responseBody)
         val token = jsonResponse.getString("token")
         val role = jsonResponse.getString("role")
+        val userId = jsonResponse.getString("userId")
 
         if (role != "patient") {
             showToast("Login failed: You are not authorized to access this app.")
@@ -99,10 +144,15 @@ class LoginPatientFragment : Fragment() {
         with(sharedPref.edit()) {
             putString("bearerToken", token)
             putString("loggedInUsername", username)
+            putString("userId", userId)
             apply()
         }
 
+
         Log.d(TAG, "Login successful: Token=$token")
+
+        Log.e(TAG, "Login successful: Token=$token, UserId=$userId")
+
         showToast("Login successful!")
         clearFields()
 

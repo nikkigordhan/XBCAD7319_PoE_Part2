@@ -108,6 +108,11 @@
         <action
             android:id="@+id/action_nav_medical_tests_to_nav_home_patient"
             app:destination="@id/nav_home_patient" />
+        <action
+            android:id="@+id/action_nav_medical_tests_to_nav_login_patient"
+            app:destination="@id/nav_login_patient"
+            app:popUpTo="@id/nav_home_patient"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -321,8 +326,5 @@
             app:destination="@id/nav_intake_forms" />
 
     </fragment>
-
-
-
 
 </navigation>

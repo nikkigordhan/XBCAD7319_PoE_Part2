@@ -126,6 +126,7 @@ class HomePatientFragment : Fragment() {
         }
     }
 
+
     private fun loadPatientNotifications() {
         Log.d(TAG, "Fetching patient notifications")
         // Get the token from SharedPreferences or another secure location

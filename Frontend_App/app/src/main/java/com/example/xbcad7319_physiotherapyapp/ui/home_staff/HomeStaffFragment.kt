@@ -75,6 +75,7 @@ class HomeStaffFragment : Fragment() {
             findNavController().navigate(R.id.action_nav_home_staff_to_nav_app_staff)
         }
 
+
         // Set OnClickListener for logout button
         btnLogout.setOnClickListener {
             logoutUser()
@@ -123,6 +124,11 @@ class HomeStaffFragment : Fragment() {
             Log.d(TAG, "Token is null, user not logged in.")
             findNavController().navigate(R.id.action_nav_home_staff_to_nav_main_menu)
         }
+    }
+
+
+
+        return view
     }
 
 

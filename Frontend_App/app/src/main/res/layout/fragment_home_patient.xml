@@ -96,6 +96,7 @@
 
         <!-- Medical History -->
 
+
         <!-- Medical Tests -->
 
         <!-- Profile -->
@@ -107,6 +108,29 @@
             android:backgroundTint="@color/blue"
             android:scaleType="fitCenter"
             android:src="@drawable/medical_tests"
+
+        <ImageButton
+            android:id="@+id/ibtnMedical_History"
+            android:layout_width="130dp"
+            android:layout_height="115dp"
+            android:backgroundTint="@color/blue"
+            android:scaleType="fitCenter"
+            android:src="@drawable/medical_history"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.202"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.499" />
+
+        <TextView
+            android:id="@+id/txtMedical_History"
+            android:layout_width="195dp"
+            android:layout_height="27dp"
+            android:gravity="center"
+            android:text="Medical History"
+            android:textStyle="bold"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.786"
@@ -114,7 +138,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.499" />
 
+        <!-- Medical Tests -->
         <ImageButton
+
             android:id="@+id/ibtnNotifications"
             android:layout_width="130dp"
             android:layout_height="120dp"
@@ -142,6 +168,35 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.494" />
 
+            android:id="@+id/ibtnMedical_Tests"
+            android:layout_width="131dp"
+            android:layout_height="119dp"
+            android:backgroundTint="@color/blue"
+            android:scaleType="fitCenter"
+            android:src="@drawable/medical_tests"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.785"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.501" />
+
+        <TextView
+            android:id="@+id/txtxMedical_Tests"
+            android:layout_width="195dp"
+            android:layout_height="27dp"
+            android:gravity="center"
+            android:text="Medical Tests"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.925"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.552" />
+
+
+        <!-- Profile -->
         <ImageButton
             android:id="@+id/ibtnProfile"
             android:layout_width="130dp"
@@ -152,6 +207,7 @@
             android:src="@drawable/profile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintHorizontal_bias="0.217"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -160,6 +216,42 @@
         <!-- Notifications -->
 
         <!-- Intake Forms -->
+
+            app:layout_constraintHorizontal_bias="0.204"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.705" />
+
+        <TextView
+            android:id="@+id/txtxProfile"
+            android:layout_width="195dp"
+            android:layout_height="27dp"
+            android:gravity="center"
+            android:text="Profile"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.752" />
+
+        <!-- Notifications -->
+        <ImageButton
+            android:id="@+id/ibtnNotifications"
+            android:layout_width="124dp"
+            android:layout_height="125dp"
+            android:backgroundTint="@color/blue"
+            android:scaleType="fitCenter"
+            android:src="@drawable/notifications"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.822"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.71" />
+
+
         <TextView
             android:id="@+id/txtxNotifications"
             android:layout_width="195dp"
@@ -169,7 +261,11 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintHorizontal_bias="0.865"
+
+            app:layout_constraintHorizontal_bias="0.925"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.752" />
@@ -187,6 +283,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.752" />
+
+
+        <!-- Intake Forms -->
 
         <ImageButton
             android:id="@+id/ibtnIntake_Forms"
@@ -224,6 +323,7 @@
             android:text="Logout"
             android:textColor="@color/black"
             android:textSize="15sp"
+
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -259,6 +359,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.562" />
+
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.992" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -62,7 +62,18 @@ class LoginStaffFragment : Fragment() {
             return
         }
 
+
         val loginRequest = LoginRequest(username, password)
+
+        // Create a new LoginRequest object for login
+        val loginRequest = LoginRequest(
+            username = username,
+            password = password
+        )
+
+
+        // Call API to log in
+
         loginUserToApi(loginRequest, username)
     }
 
