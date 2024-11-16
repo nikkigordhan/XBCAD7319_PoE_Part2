@@ -38,6 +38,11 @@ const rescheduleAppointment = async (req, res) => {
             return res.status(404).json({ message: 'Appointment not found' });
         }
 
+        // Check if the appointment status is 'approved'
+        if (appointment.status !== 'approved') {
+            return res.status(400).json({ message: 'Only approved appointments can be rescheduled' });
+        }
+        
         // Check if the logged-in user is allowed to reschedule this appointment
         if (appointment.patient.toString() !== req.user._id.toString()) {
             return res.status(403).json({ message: 'You do not have permission to reschedule this appointment' });

@@ -112,8 +112,13 @@ interface ApiService {
     @POST("api/medicalHistory")
     fun saveMedicalHistory(@Header("Authorization") token: String, @Body medicalHistory: MedicalHistory): Call<Void>
 
-    @GET("api/patient/profile")
-    fun getPatientProfile(@Header("Authorization") token: String): Call<Map<String, Any>>
+//    @GET("api/patient/profile")
+//    fun getPatientProfile(@Header("Authorization") token: String): Call<Map<String, Any>>
+
+    @GET(value = "api/ patient/ profile")
+    fun getPatientProfile(
+        @Header(value = "Authorization") token: String
+    ): Call<Map<String, Any>>
 
     @PUT("api/patient/profile")
     fun updatePatientProfile(

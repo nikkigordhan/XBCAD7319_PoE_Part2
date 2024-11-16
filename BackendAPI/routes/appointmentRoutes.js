@@ -4,7 +4,7 @@ const router = express.Router();
 const { protect } = require('../middleware/authMiddleware'); // Assuming you have a middleware to protect routes
 
 // Route to book an appointment
-router.post('/', protect, bookAppointment); 
+router.post('/book', protect, bookAppointment); 
 // Route to reschedule an appointment
 router.put('/:appointmentId', protect, rescheduleAppointment);
 // Route to cancel an appointment
